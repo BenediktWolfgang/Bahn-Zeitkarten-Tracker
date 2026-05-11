@@ -1,88 +1,111 @@
-package com.example.bahn_zeitkarten_tracker;
+package com.example.bahn_zeitkarten_tracker
 
-import android.os.Bundle;
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.activity.EdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
-import androidx.activity.EdgeToEdge;
+class loc{
 
-import com.google.android.material.snackbar.Snackbar;
+}
 
-import androidx.appcompat.app.AppCompatActivity;
+class Zeitkarten {
+    Name:       String,
+    Firma:      String,
+    Link:       String,
+    giltv:      date,
+    giltb:      date
 
-import android.view.View;
+    // giltvon und giltbis sind inklusive, d.h. deren Datum ist noch in der Gültigkeit inkludiert
+    // alle Daten sind vom User selbst bestimmbar.
+}
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+class VgFahrt {
+    von:    loc,
+    bis:    loc,
+    dayt:   datetime,
+    Co2:    float,
+    Price:  Int,
+    dist:   Int,
 
-import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding;
+    // Price is saved in Cents
+    // distance is saved as 1/10 of a km so we can display it with a , without wasting space with float
+    // dayt saves the time the journey officially started
+    // Co2 saves kg of Co2 saved
+}
 
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
-
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+class MainActivity : AppCompatActivity() {
+    private var appBarConfiguration: AppBarConfiguration? = null
+    private var binding: ActivityMainBinding? = null
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+    protected fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EdgeToEdge.enable(this)
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityMainBinding.inflate(getLayoutInflater())
+        setContentView(binding.getRoot())
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        setSupportActionBar(binding.toolbar);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, { v, insets ->
+            val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        })
+        setSupportActionBar(binding.toolbar)
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        val navController: NavController =
+            Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+        appBarConfiguration = Builder(navController.getGraph()).build()
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        binding.fab.setOnClickListener(object : OnClickListener() {
             @Override
-            public void onClick(View view) {
+            fun onClick(view: View?) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+                    .setAnchorView(R.id.fab)
+                    .setAction("Action", null).show()
             }
-        });
+        })
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.menu_main, menu)
+        return true
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        val id: Int = item.getItemId()
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            return true
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+    fun onSupportNavigateUp(): Boolean {
+        val navController: NavController? =
+            Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
         return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+                || super.onSupportNavigateUp()
     }
 }
