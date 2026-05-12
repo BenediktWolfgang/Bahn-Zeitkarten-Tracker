@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.EdgeToEdge
+//import androidx.activity.EdgeToEdge -> veraltet
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
@@ -19,6 +20,23 @@ import java.lang.reflect.Constructor
 import java.util.Date
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+
+//für ui
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.example.bahn_zeitkarten_tracker.ui.MainLayout
+
+
+//Ui verwenden:
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            MainLayout()
+        }
+    }
+}
 
 class loc{
 
@@ -59,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     @Override
     protected fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EdgeToEdge.enable(this)
+        //EdgeToEdge.enable(this) -> veraltet
+        enableEdgeToEdge(this)
 
         binding = ActivityMainBinding.inflate(getLayoutInflater())
         setContentView(binding.getRoot())
