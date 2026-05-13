@@ -24,20 +24,17 @@ import java.time.temporal.ChronoUnit
 //für ui
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.KeyEventDispatcher
 import com.example.bahn_zeitkarten_tracker.ui.MainLayout
 
 
-//Ui verwenden:
+//Main
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContent {
-            MainLayout()
-        }
+        setContentView(R.layout.activity_main)
     }
 }
-
 class loc{
 
 }
@@ -70,70 +67,7 @@ class VgFahrt (
 )
 
 
-class MainActivity : AppCompatActivity() {
-    private var appBarConfiguration: AppBarConfiguration? = null
-    private var binding: ActivityMainBinding? = null
 
-    @Override
-    protected fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //EdgeToEdge.enable(this) -> veraltet
-        enableEdgeToEdge(this)
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater())
-        setContentView(binding.getRoot())
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main, { v, insets ->
-            val systemBars: Insets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        })
-        setSupportActionBar(binding.toolbar)
-
-        val navController: NavController =
-            Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
-        appBarConfiguration = Builder(navController.getGraph()).build()
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener(object : OnClickListener() {
-            @Override
-            fun onClick(view: View?) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAnchorView(R.id.fab)
-                    .setAction("Action", null).show()
-            }
-        })
-    }
-
-    @Override
-    fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    @Override
-    fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id: Int = item.getItemId()
-
-        if (id == R.id.action_settings) {
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    @Override
-    fun onSupportNavigateUp(): Boolean {
-        val navController: NavController? =
-            Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
-}
 
 // Diese Funktion nimmt die Distanz der Strecke in Zehntel eines km auf und
 // konvertiert sie zu Preis in Cent. Muss noch anpassbar gemacht werden für Leute die sich einen
