@@ -1,6 +1,9 @@
 package com.example.bahn_zeitkarten_tracker
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import java.util.Date
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
@@ -8,15 +11,25 @@ import java.time.temporal.ChronoUnit
 
 //für ui
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 
 //Funktionen und Klassenimporte
 
 import classes_and_Functions.*
+import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding
+import com.jjoe64.graphview.GraphView
+
 //Main
-class MainActivity : ComponentActivity() {
+
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
+        val graph = findViewById<GraphView>(R.id.graph)
+        createLineGraph(graph)
     }
 }
 

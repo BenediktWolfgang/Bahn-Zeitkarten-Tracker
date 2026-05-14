@@ -7,10 +7,9 @@ plugins {
 }
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation ("com.jjoe64:graphview:4.2.2")
 }
-//repositories {
-//    mavenCentral()
-//}
+
 kotlin {
     jvmToolchain(8)
 }

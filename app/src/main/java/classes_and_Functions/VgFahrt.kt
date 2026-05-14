@@ -1,13 +1,22 @@
 package classes_and_Functions
 
-import com.example.bahn_zeitkarten_tracker.loc
+import android.R
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import java.util.Date
 
+
+// Graph Layout Shit:
+
 class VgFahrt (
-    val von:    loc,
-    val bis:    loc,
+    val von:    Loc,
+    val bis:    Loc,
     val dist:   Int,
-    val dayt:   Date?,
+    val dayt:   Date = Date(),
     val co2:    Double = dist*0.0174,
     val price:  Int = CalcPrice(dist)
 
@@ -26,4 +35,30 @@ class VgFahrt (
 // So Wenn mit 1 multipliziert wird wird Standart Wert von 10 Cent pro km angenommen
 fun CalcPrice(dist: Int): Int{
     return dist
+}
+
+
+//TODO: nach Datum sortieren noch
+fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: Date) {
+
+    for(j in 1..entries.size) {
+
+    }
+    val series = LineGraphSeries(arrayOf(
+
+
+        DataPoint(0.0, 1.0),
+        DataPoint(1.0, 5.0),
+        DataPoint(2.0, 3.0),
+        DataPoint(3.0, 7.0),
+        DataPoint(4.0, 4.0)
+    ))
+
+    graph.addSeries(series)
+
+    // Optional settings
+    graph.title = "Line Graph"
+
+    graph.viewport.isScalable = true
+    graph.viewport.isScrollable = true
 }
