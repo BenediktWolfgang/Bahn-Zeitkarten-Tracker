@@ -7,6 +7,9 @@ import android.widget.TextView
 import java.util.Date
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import androidx.activity.compose.setContent
+import androidx.core.view.KeyEventDispatcher
+import com.example.bahn_zeitkarten_tracker.ui.MainLayout
 
 
 //für ui
@@ -26,10 +29,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        setContent {
+            MainLayout()
+        }
 
-        val graph = findViewById<GraphView>(R.id.graph)
-        createLineGraph(graph)
     }
 }
 

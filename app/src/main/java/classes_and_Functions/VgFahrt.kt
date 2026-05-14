@@ -8,6 +8,11 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import java.util.Date
+//import kotlin.time.Duration
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
 
 
 // Graph Layout Shit:
@@ -16,7 +21,7 @@ class VgFahrt (
     val von:    Loc,
     val bis:    Loc,
     val dist:   Int,
-    val dayt:   Date = Date(),
+    val dayt:   LocalDateTime = LocalDateTime.now(),
     val co2:    Double = dist*0.0174,
     val price:  Int = CalcPrice(dist)
 
@@ -38,26 +43,54 @@ fun CalcPrice(dist: Int): Int{
 }
 
 
-//TODO: nach Datum sortieren noch
-fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: Date) {
+//TODO: beschriften und schöner machen
+//Diese Funktion erstellt einen Graphen und stellt den dann dar,
+fun createLineGraph(graph: GraphView,
+                    entries: List<VgFahrt>,
+                    seit: LocalDateTime,
+                    ZeitkartenPreis: Double
+    ) {
 
-    for(j in 1..entries.size) {
+    graph.removeAllSeries()
+    val series = LineGraphSeries(
 
-    }
-    val series = LineGraphSeries(arrayOf(
+        entries.map { entries ->
 
+            DataPoint(
 
-        DataPoint(0.0, 1.0),
-        DataPoint(1.0, 5.0),
-        DataPoint(2.0, 3.0),
-        DataPoint(3.0, 7.0),
-        DataPoint(4.0, 4.0)
-    ))
+                 ChronoUnit.HOURS.between(seit,entries.dayt).toDouble(),
+                 ZeitkartenPreis
+
+            )
+
+        }.toTypedArray()
+
+    )
+
+    var runningSum = 0.0
+
+    val series2 = LineGraphSeries(
+
+        entries.map { entries ->
+
+            runningSum += entries.price.toDouble()
+
+            DataPoint(
+
+                ChronoUnit.HOURS.between(seit,entries.dayt).toDouble(),
+                runningSum
+
+                )
+
+        }.toTypedArray()
+
+    )
 
     graph.addSeries(series)
+    graph.addSeries(series2)
 
     // Optional settings
-    graph.title = "Line Graph"
+    graph.title = "Preisvergleich"
 
     graph.viewport.isScalable = true
     graph.viewport.isScrollable = true
