@@ -9,18 +9,18 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import androidx.activity.compose.setContent
 import androidx.core.view.KeyEventDispatcher
-import com.example.bahn_zeitkarten_tracker.ui.MainLayout
-
 
 //für ui
+import com.example.bahn_zeitkarten_tracker.ui.MainLayout
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 
 //Funktionen und Klassenimporte
 
-import classes_and_Functions.*
-import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding
-import com.jjoe64.graphview.GraphView
+//import classes_and_Functions.*
+//import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding
+//import com.jjoe64.graphview.GraphView
+
 
 //Main
 
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //ui einbinden
         setContent {
             MainLayout()
         }
@@ -40,12 +41,6 @@ fun al(){
 
 
 }
-
-
-
-
-
-
 
 
 // Funktion nimmt zwei Datumswerte auf und gibt die verbleibende Dauer an Tagen wieder, die zwischen
