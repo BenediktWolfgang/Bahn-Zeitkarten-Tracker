@@ -45,22 +45,26 @@ fun CalcPrice(dist: Int): Int{
 
 //TODO: beschriften und schöner machen
 //Diese Funktion erstellt einen Graphen und stellt den dann dar.
-// Einen Graphview muss man zuerst erstellen und mitgeben, dann nimmt es
-fun createLineGraph(graph: GraphView,
-                    entries: List<VgFahrt>,
-                    seit: LocalDateTime,
-                    ZeitkartenPreis: Double
-    ) {
+// Einen Graphview muss man zuerst erstellen und mitgeben, dann erstellt es in diesem GraphView die
+// x und y Achse basierend auf den addedSeries. Eine Linie ist die gerade Linie des ZeitkartenPreises
+// dessen y-Wert über die Zeit gleich bleibt, die andere Linie ist der sich aufsummierende
+// Wert von den Vergangenen Fahrten, die man dann mit dem Zeitkartenpreis graphisch vergeleichen
+// kann. Außerdem kann man Fahrten limitieren basierend auf der Zeit mit seit.
+// Bei ShowCo2 zeigt es die Co2 Ersparnisse die man über die Zeit gemacht hat.
+// ZeitkartenPreis soll nur dann nicht benutzt werden wenn man Co2 mappt
+fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: LocalDateTime,
+                    ZeitkartenPreis: Double = 0.0, showCo2: Boolean = false) {
 
+    val entries2 = limitbytime(entries, seit)
     graph.removeAllSeries()
     val series = LineGraphSeries(
 
-        entries.map { entries ->
+        entries2.map { entries ->
 
             DataPoint(
 
-
-                 ChronoUnit.HOURS.between(seit,entries.dayt).toDouble(),
+                 ChronoUnit.HOURS.between(seit,entries.dayt)
+                     .toDouble(),
                  ZeitkartenPreis
 
             )
@@ -68,18 +72,24 @@ fun createLineGraph(graph: GraphView,
         }.toTypedArray()
 
     )
+    if(showCo2) graph.removeAllSeries()
 
-    var runningSum = 0.0
+    var runningSum = 0
 
     val series2 = LineGraphSeries(
 
-        entries.map { entries ->
+        entries2.map { entries ->
 
-            runningSum += entries.price.toDouble()
+            if(!showCo2)
+                runningSum += entries.price
+
+            else
+                runningSum += entries.co2.toInt()
 
             DataPoint(
 
-                ChronoUnit.HOURS.between(seit,entries.dayt).toDouble(),
+                ChronoUnit.HOURS.between(seit,entries.dayt)
+                    .toDouble(),
                 runningSum
 
                 )
@@ -98,3 +108,10 @@ fun createLineGraph(graph: GraphView,
     graph.viewport.isScrollable = true
 }
 
+
+//returns entries of VgFahrt nach einem bestimmten Datum
+private fun limitbytime(entries: List<VgFahrt>, seit: LocalDateTime): List<VgFahrt> {
+
+    return entries.filter{ it.dayt.isAfter(seit)}
+
+}
