@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    implementation(libs.material3)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 

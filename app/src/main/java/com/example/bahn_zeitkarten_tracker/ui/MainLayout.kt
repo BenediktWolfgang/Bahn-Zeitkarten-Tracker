@@ -16,6 +16,10 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,18 +33,25 @@ import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextLight
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 import java.util.Locale
 
-//LayoutMain für grundlayout (auf allen seiten gleich)
+
+//LayoutMain für Grundlayout (auf allen Seiten gleich)
 @Composable
 fun MainLayout(){
+    var selectedScreen by remember { mutableStateOf<Screen>(Screen.Home) } //welcher Screen ist gerade aktiv + default Home als erstes
     Scaffold( //Layout - untereinander
         modifier = Modifier
             .fillMaxSize() //ganzer Bildschirm
             .systemBarsPadding(), //nicht unter Statusbar/Navigationsbar vom Gerät
         topBar = {
-            AppHeader(title = "Bahn-Zeitkarten-Tracker")
+            AppHeader(title = selectedScreen.title)
         },
         bottomBar = {
-            MenuBar()
+            MenuBar(
+                selectedScreen = selectedScreen,
+                onScreenSelected = { screen ->
+                    selectedScreen = screen
+                }
+            )
         }
     ) {
         paddingValues ->
@@ -50,7 +61,20 @@ fun MainLayout(){
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
-            Text("Hier kommt später der Hauptscreen hin...")
+            when (selectedScreen) { //Inhalt zuweisen, je nach Screen
+                Screen.Home -> HomeLayout(
+                    modifier = Modifier.fillMaxSize()
+                )
+                Screen.Map -> MapLayout(
+                    modifier = Modifier.fillMaxSize()
+                )
+                Screen.BreakEven -> BreakEvenLayout(
+                    modifier = Modifier.fillMaxSize()
+                )
+                Screen.CO2 -> CO2Layout(
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
 
     }
@@ -71,7 +95,7 @@ fun AppHeader(title: String) {
             contentDescription = "Burgermenü Icon",
             modifier = Modifier
                 .size(48.dp)
-                .padding(start = 8.dp)
+                .padding(start = 16.dp)
                 .align(Alignment.CenterStart)
         )
 
@@ -86,37 +110,54 @@ fun AppHeader(title: String) {
 
 //MenuBar - Navigationsleiste am unteren Rand:
 @Composable
-fun MenuBar(){
+fun MenuBar(
+    selectedScreen: Screen,
+    onScreenSelected: (Screen) -> Unit
+){
     NavigationBar {
-        MenuBarItem (
-            selected = true,
-            icon = R.drawable.ticket_icon,
-            label = "Tickets",
-            onClick = {}
-        )
-
-        MenuBarItem (
-            selected = false,
-            icon = R.drawable.map_icon,
-            label = "Karte",
-            onClick = {}
-        )
-
-        MenuBarItem (
-            selected = false,
-            icon = R.drawable.euro_icon,
-            label = "Analyse",
-            onClick = {}
-        )
-
-        MenuBarItem (
-            selected = false,
-            icon = R.drawable.leaf_icon,
-            label = "CO2",
-            onClick = {}
-        )
+        bottomNavigationScreens.forEach { screen ->
+            MenuBarItem(
+                selected = selectedScreen == screen,
+                icon = screen.icon,
+                label = screen.label,
+                onClick = {
+                    onScreenSelected(screen)
+                }
+            )
+        }
     }
-}//End ManuBar
+}//End Menubar
+
+////TODO: Löschen:
+//        MenuBarItem (
+//            selected = true,
+//            icon = R.drawable.ticket_icon,
+//            label = "Tickets",
+//            onClick = {}
+//        )
+//
+//        MenuBarItem (
+//            selected = false,
+//            icon = R.drawable.map_icon,
+//            label = "Karte",
+//            onClick = {}
+//        )
+//
+//        MenuBarItem (
+//            selected = false,
+//            icon = R.drawable.euro_icon,
+//            label = "Analyse",
+//            onClick = {}
+//        )
+//
+//        MenuBarItem (
+//            selected = false,
+//            icon = R.drawable.leaf_icon,
+//            label = "CO2",
+//            onClick = {}
+//        )
+//    }
+//}//End ManuBar
 
 //MenuBarItem:
 @Composable
