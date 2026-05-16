@@ -88,39 +88,65 @@ fun HomeLayout(
     Column(
         modifier = modifier
             .fillMaxSize()
-   ) {
+    ) {
+
+        ZeitkartenSection(
+            modifier = modifier.weight(1f)
+        )
+
+        FahrtenSection(
+            modifier = modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+fun ZeitkartenSection(
+    modifier:Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        SectionHeader(
+            title = "Meine Zeitkarten",
+            buttonText = "+ Neue Zeitkarte",
+            onButtonClick = {
+                //TODO: PopUp verknüpfen
+            }
+        )
+
         LazyColumn( //weil Scrollbar
-            modifier = modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
         ) {
-            item {
-                SectionHeader(
-                    title = "Meine Zeitkarten",
-                    buttonText = "+ Neue Zeitkarte",
-                    onButtonClick = {
-                        //TODO: PopUp verknüpfen
-                    }
-                )
-            }
             items(zeitkarten) { zeitkarte ->
                 TicketCard(zeitkarte = zeitkarte)
             }
         }
+    }
+
+}
+
+
+@Composable
+fun FahrtenSection(
+    modifier:Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+    ) {
+        SectionHeader (
+            title= "Meine Fahrten",
+            buttonText = "+ Neue Fahrt",
+            onButtonClick ={
+                //TODO: PopUp verknüpfen
+            }
+        )
+
         LazyColumn( //weil Scrollbar
-            modifier = modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
-            item{
-                SectionHeader (
-                    title= "Meine Fahrten",
-                    buttonText = "+ Neue Fahrt",
-                    onButtonClick ={
-                        //TODO: PopUp verknüpfen
-                    }
-                )
-            }
             items(vgfahrten) { vgfahrt ->
-                    FahrtenCard(vgfahrt = vgfahrt)
+                FahrtenCard(vgfahrt = vgfahrt)
             }
 
         }
