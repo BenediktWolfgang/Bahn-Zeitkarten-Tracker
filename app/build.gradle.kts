@@ -67,6 +67,12 @@ dependencies {
 
     implementation ("com.jjoe64:graphview:4.2.2")
 
+    //mapsforge
+    implementation("com.github.mapsforge.mapsforge:mapsforge-map-android:0.28.0@jar")
+    implementation("com.caverock:androidsvg:1.4")
+    implementation("com.github.mapsforge.mapsforge:mapsforge-core:0.28.0@jar")
+    implementation("com.github.mapsforge.mapsforge:mapsforge-poi:0.28.0@jar")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 
 
