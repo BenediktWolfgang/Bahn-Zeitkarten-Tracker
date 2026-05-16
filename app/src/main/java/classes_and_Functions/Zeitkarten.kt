@@ -4,6 +4,7 @@ import java.util.Date
 
 class Zeitkarten (
     val name:       String,
+    val Preis:      Int,
     val firma:      String?,
     val link:       String?,
     val giltv: Date,
