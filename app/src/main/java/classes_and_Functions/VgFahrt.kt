@@ -74,17 +74,17 @@ fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: LocalDateTim
     )
     if(showCo2) graph.removeAllSeries()
 
-    var runningSum = 0
+    var runningSum = 0.0
 
     val series2 = LineGraphSeries(
 
         entries2.map { entries ->
 
             if(!showCo2)
-                runningSum += entries.price
+                runningSum += entries.price.toDouble()
 
             else
-                runningSum += entries.co2.toInt()
+                runningSum += entries.co2
 
             DataPoint(
 
