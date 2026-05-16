@@ -18,11 +18,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.graphicsLayer
@@ -31,9 +29,57 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
-import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextDark
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
-import java.util.Date
+import classes_and_Functions.Zeitkarte
+import androidx.compose.foundation.lazy.items
+import classes_and_Functions.VgFahrt
+import classes_and_Functions.formatDate
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
+//dummy Zeitkarten:
+val zeitkarten = listOf(
+    Zeitkarte(
+        name = "Klimaticket Österreich Jugend",
+        preis = 1095,
+        firma = "ÖBB",
+        link = "",
+        giltv = LocalDate.of(2026, 1, 1),
+        giltb = LocalDate.of(2026, 12, 31)
+    ),
+    Zeitkarte(
+        name = "Wiener Linien Jahreskarte",
+        preis = 365,
+        firma = "Wiener Linien",
+        link = "",
+        giltv = LocalDate.of(2025,5,31),
+        giltb = LocalDate.of(2026,5,30)
+    ),
+    Zeitkarte(
+        name = "Klimaticket Österreich Jugend",
+        preis = 1095,
+        firma = "ÖBB",
+        link = "",
+        giltv = LocalDate.of(2026, 1, 1),
+        giltb = LocalDate.of(2026, 12, 31)
+    )
+)
+
+val vgfahrten = listOf(
+    VgFahrt(
+        von = "Wien",
+        bis = "Salzburg",
+        dist = 300,
+        dayt = LocalDateTime.of(2026, 5, 11, 15, 22)
+    ),
+    VgFahrt(
+        von = "Wien",
+        bis = "Graz",
+        dist = 200,
+        dayt = LocalDateTime.of(2026, 5, 15, 12, 22)
+    )
+)
 
 @Composable
 fun HomeLayout(
@@ -41,23 +87,29 @@ fun HomeLayout(
 ) {
     Column(
         modifier = modifier
-    ) {
+            .fillMaxSize()
+   ) {
         LazyColumn( //weil Scrollbar
-            modifier = modifier,
+            modifier = modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
-        ){
-            item{
-                SectionHeader (
-                    title= "Meine Zeitkarten",
+        ) {
+            item {
+                SectionHeader(
+                    title = "Meine Zeitkarten",
                     buttonText = "+ Neue Zeitkarte",
-                    onButtonClick ={
+                    onButtonClick = {
                         //TODO: PopUp verknüpfen
                     }
                 )
             }
-            item{
-                TicketCard()
+            items(zeitkarten) { zeitkarte ->
+                TicketCard(zeitkarte = zeitkarte)
             }
+        }
+        LazyColumn( //weil Scrollbar
+            modifier = modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ){
             item{
                 SectionHeader (
                     title= "Meine Fahrten",
@@ -67,8 +119,8 @@ fun HomeLayout(
                     }
                 )
             }
-            item{
-                FahrtenCard()
+            items(vgfahrten) { vgfahrt ->
+                    FahrtenCard(vgfahrt = vgfahrt)
             }
 
         }
@@ -115,7 +167,7 @@ fun SectionHeader (
 
 @Composable
 fun TicketCard(
-
+zeitkarte: Zeitkarte
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -135,9 +187,11 @@ fun TicketCard(
 //                giltv
 //                giltb
                 Text (
-                    "83 Tage",
+                    text = "${zeitkarte.giltNochTage()} Tage",
+                    maxLines = 1,
+                    fontSize = 13.sp,
+                    softWrap = false,
                     modifier = Modifier
-                        //.padding(bottom = 20.dp)
                         .graphicsLayer(rotationZ = -90f)
                         .align(Alignment.Center)
                 )
@@ -152,7 +206,7 @@ fun TicketCard(
                     .weight(1f) //restlicher Platz
             ) {
                 Text(
-                    text = "Klimaticket Österreich Jugend",
+                    text = zeitkarte.name,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = AppPrimary,
@@ -161,12 +215,12 @@ fun TicketCard(
                 )
 
                 Text(
-                    text = "ÖBB",
+                    text = zeitkarte.firma,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Text("Gültig von: giltv")
-                Text("Gültig bis: giltb")
-                Text("Preis: 1095 €")
+                Text("Gültig von: ${formatDate(zeitkarte.giltv)}")
+                Text("Gültig bis: ${formatDate(zeitkarte.giltb)}")
+                Text("Preis: ${zeitkarte.preis} €")
 
             }
         }
@@ -195,7 +249,7 @@ fun DashedVerticalDivider() { //vertikale linie
 
 @Composable
 fun FahrtenCard(
-
+    vgfahrt: VgFahrt
 ) {
     Card(
         modifier = Modifier

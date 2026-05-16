@@ -1,6 +1,5 @@
 package classes_and_Functions
 
-import android.R.id.message
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -14,11 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -34,25 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import classes_and_Functions.VgFahrt
 import kotlinx.coroutines.launch
-import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
 //gibt Anzahl an zusätzlichen Fahrten wieder die man zurücklegen muss um den Preis
 // seiner Zeitkarte wieder drinne zu haben.
-fun BreakEvenSim(Fahrten: List<VgFahrt>, Karte: Zeitkarten): Double {
+fun BreakEvenSim(Fahrten: List<VgFahrt>, Karte: Zeitkarte): Double {
 
     val avg = AvgPrice(Fahrten)
     val sum = SumPrice(Fahrten)
 
-    return if (sum > Karte.Preis)
+    return if (sum > Karte.preis)
         0.0
 
     else
-        Karte.Preis/avg.toDouble()
+        Karte.preis/avg.toDouble()
 
 }
 
@@ -70,6 +65,7 @@ fun SumPrice(Fahrten : List<VgFahrt>): Int {
 
 }
 
+
 fun converttoDate(futuredate: Int): LocalDate {
 
     val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
@@ -81,6 +77,11 @@ fun converttoDate(futuredate: Int): LocalDate {
 
     return date
 
+}
+
+fun formatDate(date: LocalDate): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    return date.format(formatter)
 }
 
 // Basic Function Scaffolding kopiert von

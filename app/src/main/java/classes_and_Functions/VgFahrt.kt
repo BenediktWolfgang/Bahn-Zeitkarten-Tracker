@@ -10,6 +10,7 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import java.util.Date
 //import kotlin.time.Duration
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
@@ -18,8 +19,8 @@ import java.time.temporal.Temporal
 // Graph Layout Shit:
 
 class VgFahrt (
-    val von:    Loc,
-    val bis:    Loc,
+    val von:    String,//Loc,
+    val bis:    String, //Loc,
     val dist:   Int,
     val dayt:   LocalDateTime = LocalDateTime.now(),
     val co2:    Double = dist*0.0174,
