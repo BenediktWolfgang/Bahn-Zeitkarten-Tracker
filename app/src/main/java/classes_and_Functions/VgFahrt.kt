@@ -44,7 +44,8 @@ fun CalcPrice(dist: Int): Int{
 
 
 //TODO: beschriften und schöner machen
-//Diese Funktion erstellt einen Graphen und stellt den dann dar,
+//Diese Funktion erstellt einen Graphen und stellt den dann dar.
+// Einen Graphview muss man zuerst erstellen und mitgeben, dann nimmt es
 fun createLineGraph(graph: GraphView,
                     entries: List<VgFahrt>,
                     seit: LocalDateTime,
@@ -57,6 +58,7 @@ fun createLineGraph(graph: GraphView,
         entries.map { entries ->
 
             DataPoint(
+
 
                  ChronoUnit.HOURS.between(seit,entries.dayt).toDouble(),
                  ZeitkartenPreis
@@ -95,3 +97,4 @@ fun createLineGraph(graph: GraphView,
     graph.viewport.isScalable = true
     graph.viewport.isScrollable = true
 }
+
