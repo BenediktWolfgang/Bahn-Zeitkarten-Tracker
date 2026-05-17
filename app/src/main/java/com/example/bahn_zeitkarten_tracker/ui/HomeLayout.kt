@@ -43,10 +43,10 @@ val zeitkarten = listOf(
     Zeitkarte(
         name = "Klimaticket Österreich Jugend",
         preis = 1095,
-        firma = "ÖBB",
+        firma = null,
         link = "",
-        giltv = LocalDate.of(2026, 1, 1),
-        giltb = LocalDate.of(2026, 12, 31)
+        giltv = LocalDate.of(2024, 1, 1),
+        giltb = LocalDate.of(2025, 12, 31)
     ),
     Zeitkarte(
         name = "Wiener Linien Jahreskarte",
@@ -61,7 +61,7 @@ val zeitkarten = listOf(
         preis = 1095,
         firma = "ÖBB",
         link = "",
-        giltv = LocalDate.of(2026, 1, 1),
+        giltv = LocalDate.of(2025, 1, 1),
         giltb = LocalDate.of(2026, 12, 31)
     )
 )
@@ -241,7 +241,7 @@ zeitkarte: Zeitkarte
                 )
 
                 Text(
-                    text = zeitkarte.firma,
+                    text = zeitkarte.firma?: "",
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text("Gültig von: ${formatDate(zeitkarte.giltv)}")
@@ -315,7 +315,7 @@ fun FahrtenCard(
     showBackground = true,
     device = "id:pixel_9"
 )
-@Composable //Funktion, dass es MainLayout in Preview anzeigt
+@Composable //Funktion, dass es  in Preview anzeigt
 fun HomeLayoutPreview() {
     HomeLayout(
         modifier = Modifier.fillMaxSize()

@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.ui)
 
     implementation ("com.jjoe64:graphview:4.2.2")
+    implementation(libs.ui.text)
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 

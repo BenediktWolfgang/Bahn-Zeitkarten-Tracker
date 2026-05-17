@@ -6,8 +6,8 @@ import java.time.temporal.ChronoUnit
 class Zeitkarte (
     val name:       String,
     val preis:      Int,
-    val firma:      String,
-    val link:       String,
+    val firma:      String?,
+    val link:       String?,
     val giltv: LocalDate,
     val giltb: LocalDate
 
