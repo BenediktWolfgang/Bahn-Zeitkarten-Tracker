@@ -13,6 +13,7 @@ class Zeitkarte (
 
     // giltvon und giltbis sind inklusive, d.h. deren Datum ist noch in der Gültigkeit inkludiert
     // alle Daten sind vom User selbst bestimmbar.
+    //Preis safed in cents.
 
 ){
     fun giltNochTage(): Int {

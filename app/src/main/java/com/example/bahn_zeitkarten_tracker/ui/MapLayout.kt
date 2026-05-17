@@ -80,7 +80,7 @@ fun MapLayout(
             },
             enabled = aktiv,
             shape = RoundedCornerShape(12.dp),
-            colors = outlinedButtonColors( //zuerst grau; dann farbig
+            colors = ButtonDefaults.buttonColors( //zuerst grau; dann farbig
                 contentColor = AppTextLight,
                 disabledContentColor = AppTextLight,
                 containerColor = AppPrimary,

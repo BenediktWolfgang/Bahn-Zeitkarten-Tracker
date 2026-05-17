@@ -38,51 +38,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-//dummy Zeitkarten:
-val zeitkarten = listOf(
-    Zeitkarte(
-        name = "Klimaticket Österreich Jugend",
-        preis = 1095,
-        firma = null,
-        link = "",
-        giltv = LocalDate.of(2024, 1, 1),
-        giltb = LocalDate.of(2025, 12, 31)
-    ),
-    Zeitkarte(
-        name = "Wiener Linien Jahreskarte",
-        preis = 365,
-        firma = "Wiener Linien",
-        link = "",
-        giltv = LocalDate.of(2025,5,31),
-        giltb = LocalDate.of(2026,5,30)
-    ),
-    Zeitkarte(
-        name = "Klimaticket Österreich Jugend",
-        preis = 1095,
-        firma = "ÖBB",
-        link = "",
-        giltv = LocalDate.of(2025, 1, 1),
-        giltb = LocalDate.of(2026, 12, 31)
-    )
-)
-
-val vgfahrten = listOf(
-    VgFahrt(
-        von = "Wien",
-        bis = "Salzburg",
-        dist = 300,
-        dayt = LocalDateTime.of(2026, 5, 11, 15, 22)
-    ),
-    VgFahrt(
-        von = "Wien",
-        bis = "Graz",
-        dist = 200,
-        dayt = LocalDateTime.of(2026, 5, 15, 12, 22)
-    )
-)
 
 @Composable
-fun HomeLayout(
+fun HomeLayout( //Grundlayout in Home
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -91,17 +49,17 @@ fun HomeLayout(
     ) {
 
         ZeitkartenSection(
-            modifier = modifier.weight(1f)
+            modifier = Modifier.weight(1f)
         )
 
         FahrtenSection(
-            modifier = modifier.weight(1f)
+            modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-fun ZeitkartenSection(
+fun ZeitkartenSection( //Ab Meine Zeitkarten
     modifier:Modifier = Modifier
 ) {
     Column(
@@ -128,7 +86,7 @@ fun ZeitkartenSection(
 
 
 @Composable
-fun FahrtenSection(
+fun FahrtenSection( //ab Meine Fahrten
     modifier:Modifier = Modifier
 ) {
     Column(
@@ -154,12 +112,12 @@ fun FahrtenSection(
 }
 
 @Composable
-fun SectionHeader (
+fun SectionHeader ( //Meine Zeitkarten und Meine Fahrten "Header" mit Button
     title:String,
     buttonText: String,
     onButtonClick: () -> Unit
 ){
-    Row(
+    Row( //Überschrift
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
@@ -171,7 +129,7 @@ fun SectionHeader (
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
         )
-        OutlinedButton (
+        OutlinedButton ( //Button
             onClick = onButtonClick,
             border = BorderStroke(
                 width = 1.dp,
@@ -192,7 +150,7 @@ fun SectionHeader (
 }
 
 @Composable
-fun TicketCard(
+fun TicketCard( //eine Box aka Card einer Zeitkarte
 zeitkarte: Zeitkarte
 ) {
     Card(
@@ -223,7 +181,7 @@ zeitkarte: Zeitkarte
                 )
             }
 
-            DashedVerticalDivider()
+            DashedVerticalDivider() //Stricklierte Linie
 
             //rechter Bereich
             Column(
@@ -246,7 +204,7 @@ zeitkarte: Zeitkarte
                 )
                 Text("Gültig von: ${formatDate(zeitkarte.giltv)}")
                 Text("Gültig bis: ${formatDate(zeitkarte.giltb)}")
-                Text("Preis: ${zeitkarte.preis} €")
+                Text("Preis: ${zeitkarte.preis/100.00} €")
 
             }
         }
@@ -254,7 +212,7 @@ zeitkarte: Zeitkarte
 } //end TicketCard
 
 @Composable
-fun DashedVerticalDivider() { //vertikale linie
+fun DashedVerticalDivider() { //vertikale linie - strichliert
     Canvas(
         modifier = Modifier
             .fillMaxHeight()
@@ -274,7 +232,7 @@ fun DashedVerticalDivider() { //vertikale linie
 }
 
 @Composable
-fun FahrtenCard(
+fun FahrtenCard( //eine Card für eine Fahrt
     vgfahrt: VgFahrt
 ) {
     Card(
@@ -289,7 +247,7 @@ fun FahrtenCard(
                 .weight(1f) //restlicher Platz
         ) {
             Text(
-                text = "Von - Bis",
+                text = "${vgfahrt.von} - ${vgfahrt.bis}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = AppPrimary,
@@ -297,13 +255,13 @@ fun FahrtenCard(
 
             )
 
-            Text(
+            Text( //Klimaticket //TODO: Noch pointer bauen und verknüpfen
                 text = "Klimaticket Österreich",
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text("Datum: ")
-            Text("Km: ")
-            Text("Preis: 1095 €")
+            Text("Datum: ${formatDate(vgfahrt.dayt.toLocalDate())}")
+            Text("Km: ${vgfahrt.dist/10.0}")
+            Text("Preis: ${vgfahrt.price/100.0} €")
 
         }
     }

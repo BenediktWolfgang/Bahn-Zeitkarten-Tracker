@@ -65,6 +65,10 @@ fun SumPrice(Fahrten : List<VgFahrt>): Int {
 
 }
 
+//returns number of past Travels from a List of past Travels
+fun SumRides(fahrten : List<VgFahrt>):Int{
+    return fahrten.size
+}
 
 fun converttoDate(futuredate: Int): LocalDate {
 

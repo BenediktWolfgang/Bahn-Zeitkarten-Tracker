@@ -23,6 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import classes_and_Functions.AvgPrice
+import classes_and_Functions.SumPrice
+import classes_and_Functions.BreakEvenSim
 import classes_and_Functions.Zeitkarte
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
@@ -32,6 +35,10 @@ fun BreakEvenLayout(
     modifier: Modifier = Modifier
 ) {
     var selectedZeitkarte by remember { mutableStateOf<Zeitkarte?>(null) }
+    val fahrtkostenGesamt = SumPrice(vgfahrten)
+    val durchschnitt = AvgPrice(vgfahrten)
+    val breakEven = selectedZeitkarte?.let { BreakEvenSim(vgfahrten, it) }
+    val anzFahrten = SumRides(vgfahrten)
 
     Column(
         modifier = modifier
@@ -62,27 +69,34 @@ fun BreakEvenLayout(
                         .align(Alignment.CenterHorizontally)
                 )
                 Text(
-                    text = "Kosten Zeitkarte: €",
+                    text = "Kosten Zeitkarte: \${selectedZeitkarte?.preis ?: \"-\"}€",
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .padding(start = 16.dp)
                 )
 
                 Text(
-                    text = "Fahrten gesamt: ",
+                    text = "Fahrten gesamt: ${anzFahrten}",
                     modifier = Modifier
                         .padding(bottom = 8.dp)
                         .padding(start = 16.dp)
                 )
                 Text(
-                    text = "Kosten pro Fahrt: €",
+                    text = "Kosten pro Fahrt: ${durchschnitt}€",
                     modifier = Modifier
                         .padding(bottom = 8.dp)
                         .padding(start = 16.dp)
                 )
 
                 Text(
-                    text = "Fahrtkosten gesamt: €",
+                    text = "Fahrtkosten gesamt: ${fahrtkostenGesamt}€",
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(start = 16.dp)
+                )
+
+                Text(
+                    text = "noch ${breakEven} Fahrten fahren um Break-Even zu erreichen",
                     modifier = Modifier
                         .padding(bottom = 8.dp)
                         .padding(start = 16.dp)
