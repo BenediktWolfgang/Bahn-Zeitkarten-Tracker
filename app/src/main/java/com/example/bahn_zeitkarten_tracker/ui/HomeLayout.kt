@@ -32,7 +32,6 @@ import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 import classes_and_Functions.Zeitkarte
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import classes_and_Functions.VgFahrt
@@ -40,30 +39,33 @@ import classes_and_Functions.formatDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
-
 @Composable
 fun HomeLayout( //Grundlayout in Home
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    zeitkarten: MutableList<Zeitkarte>, //weil ArrayList ist veränderbar
+    fahrten: MutableList<VgFahrt>,
+    onZeitkarteAdd: (Zeitkarte) -> Unit,
+    onFahrtAdd: (VgFahrt) -> Unit
 ) {
 //Zeitkarten:
     //Eingabe für Zeitkarten Defaultmäßig falsch (zeigt Homescreen)
     var showAddZeitkarte by remember { mutableStateOf(false) }
 
-    val gespeicherteZeitkarten = remember {
-        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
-            addAll(zeitkarten)
-        }
-    } //dass Zeitkarten gespeichert werden können
+//    val gespeicherteZeitkarten = remember {
+//        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
+//            addAll(zeitkarten)
+//        }
+//    } //dass Zeitkarten gespeichert werden können
 
 //Fahrten
     //Eingabe für Fahrten Defaultmäßig falsch (zeigt Homescreen)
     var showAddFahrt by remember { mutableStateOf(false) }
 
-    val gespeicherteFahrten = remember {
-        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
-            addAll(vgfahrten)
-        }
-    } //dass Fahrten gespeichert werden können
+//    val gespeicherteFahrten = remember {
+//        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
+//            addAll(vgfahrten)
+//        }
+//    } //dass Fahrten gespeichert werden können
 
     if(showAddZeitkarte) {
         AddZeitkarte(
@@ -72,19 +74,19 @@ fun HomeLayout( //Grundlayout in Home
                 showAddZeitkarte = false
             },
         ) { neueZeitkarte ->
-            gespeicherteZeitkarten.add(neueZeitkarte)
+            zeitkarten.add(neueZeitkarte)
             showAddZeitkarte = false
         }
     } else if(showAddFahrt) {
         AddFahrt (
             modifier = modifier,
-            onBackClick = {
-                showAddFahrt = false
-            },
-        ) { neueFahrt ->
-            gespeicherteFahrten.add(neueFahrt)
+            zeitkarten = zeitkarten,
+            onBackClick = {showAddFahrt = false},
+            onSaveClick = { neueFahrt ->
+                fahrten.add(neueFahrt)
             showAddFahrt = false
         }
+    )
     } else {
         Column(
             modifier = modifier
@@ -93,7 +95,7 @@ fun HomeLayout( //Grundlayout in Home
 
             ZeitkartenSection(
                 modifier = Modifier.weight(1f),
-                zeitkarten = gespeicherteZeitkarten,
+                zeitkarten = zeitkarten,
                 onAddClick = {
                     showAddZeitkarte = true
                 } //Zeitkarte hinzufügen
@@ -101,7 +103,7 @@ fun HomeLayout( //Grundlayout in Home
 
             FahrtenSection(
                 modifier = Modifier.weight(1f),
-                vgfahrten = gespeicherteFahrten,
+                vgfahrten = fahrten,
                 onAddClick = {
                     showAddFahrt = true
                 } //Fahrt hinzufügen
@@ -319,15 +321,3 @@ fun FahrtenCard( //eine Card für eine Fahrt
     }
 } //end FahrtenCard
 
-
-@Preview( //vorschau in Android studio
-    name = "Vorschau HomeLayout",
-    showBackground = true,
-    device = "id:pixel_9"
-)
-@Composable //Funktion, dass es  in Preview anzeigt
-fun HomeLayoutPreview() {
-    HomeLayout(
-        modifier = Modifier.fillMaxSize()
-    )
-}

@@ -4,6 +4,8 @@ import android.R
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.unit.dp
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -23,7 +25,8 @@ class VgFahrt (
     val bis:    String, //Loc,
     val dist:   Int,
     val dayt:   LocalDateTime = LocalDateTime.now(),
-    val co2:    Double = dist*0.0174,
+    val zeitkarte:  Zeitkarte? = null, //zuordnung zu Zeitkarte mit der gefahren wird
+    val co2:    Double = dist*0.000571,  // dist in 1/10 km -> /10 * 5.71g -> in kg /1000
     val price:  Int = CalcPrice(dist)
 
     // Price is saved in Cents
@@ -44,7 +47,7 @@ fun CalcPrice(dist: Int): Int{
 }
 
 
-//TODO: beschriften und schöner machen -> nope können wir nicht verwenden wg Compose...
+//TODO: beschriften und schöner machen
 //Diese Funktion erstellt einen Graphen und stellt den dann dar.
 // Einen Graphview muss man zuerst erstellen und mitgeben, dann erstellt es in diesem GraphView die
 // x und y Achse basierend auf den addedSeries. Eine Linie ist die gerade Linie des ZeitkartenPreises
@@ -53,57 +56,96 @@ fun CalcPrice(dist: Int): Int{
 // kann. Außerdem kann man Fahrten limitieren basierend auf der Zeit mit seit.
 // Bei ShowCo2 zeigt es die Co2 Ersparnisse die man über die Zeit gemacht hat.
 // ZeitkartenPreis soll nur dann nicht benutzt werden wenn man Co2 mappt
-fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: LocalDateTime,
-                    ZeitkartenPreis: Double = 0.0, showCo2: Boolean = false) {
 
-    val entries2 = limitbytime(entries, seit)
+// ! XML Graph in Compose eingebunden, da wir den Graph schon als xml hatten und zum neuerstellen die Zeit nicht gereicht hätte
+// Dafür KI befragt, wie das geht (siehe KI Nutzung)
+
+fun createLineGraph(
+    graph: GraphView,
+    entries: List<VgFahrt>,
+    seit: LocalDateTime,
+    bis: LocalDateTime,
+    ZeitkartenPreis: Double = 0.0,
+    showCo2: Boolean = false
+) {
+    val entries2 = limitbytime(entries, seit).sortedBy { it.dayt }
+    if (entries2.isEmpty()) return
+
     graph.removeAllSeries()
+
+    // X Achse: Tage Dauer der Zeitkarte
+    val maxX = ChronoUnit.DAYS.between(seit, bis).toDouble()
+
+    //weil Graph zu breit (von KI vorschläge geben lassen -> dieser hat funktioniert)
+    graph.viewport.isXAxisBoundsManual = true
+    graph.viewport.setMinX(0.0)
+    graph.viewport.setMaxX(maxX)
+    graph.viewport.isYAxisBoundsManual = false
+//    graph.viewport.setMinY(0.0)
+
+    val maxFahrtkosten = entries2.sumOf { it.price.toDouble() / 100.0 }
+    val maxY = if (showCo2) {
+        entries2.sumOf { it.dist / 10.0 * 0.12 } * 1.2
+    } else {
+        maxOf(ZeitkartenPreis / 100.0, maxFahrtkosten) * 1.2
+    }
+    graph.viewport.setMaxY(maxY)
+
+
+    // Linie 1: Zeitkartenpreis - gerade horizontale Linie
     val series = LineGraphSeries(
-
-        entries2.map { entries ->
-
-            DataPoint(
-
-                 ChronoUnit.HOURS.between(seit,entries.dayt)
-                     .toDouble(),
-                 ZeitkartenPreis
-
-            )
-
-        }.toTypedArray()
-
+        arrayOf(
+            DataPoint(0.0, ZeitkartenPreis / 100.0),  // Startpunkt
+            DataPoint(maxX, ZeitkartenPreis / 100.0)   // Endpunkt
+        )
     )
-    if(showCo2) graph.removeAllSeries()
+    series.color = android.graphics.Color.BLUE
 
+    // Linie 2: aufsummierte Fahrtkosten oder Zug CO2
     var runningSum = 0.0
-
     val series2 = LineGraphSeries(
-
-        entries2.map { entries ->
-
-            if(!showCo2)
-                runningSum += entries.price.toDouble()
-
-            else
-                runningSum += entries.co2
-
-            DataPoint(
-
-                ChronoUnit.HOURS.between(seit,entries.dayt)
-                    .toDouble(),
-                runningSum
-
-                )
-
+        entries2.map { entry ->
+            if (!showCo2) runningSum += entry.price.toDouble() / 100.0
+            else runningSum += entry.co2
+            DataPoint(ChronoUnit.DAYS.between(seit, entry.dayt).toDouble(), runningSum)
         }.toTypedArray()
-
     )
+    series2.color = android.graphics.Color.GREEN
 
-    graph.addSeries(series)
-    graph.addSeries(series2)
+    // Linie 3: Auto CO2 (nur bei CO2 Ansicht)
+    var runningSumCar = 0.0
+    val series3 = LineGraphSeries(
+        entries2.map { entry ->
+            runningSumCar += entry.dist / 10.0 * 0.2173 //Auto CO2 in kg
+            DataPoint(ChronoUnit.DAYS.between(seit, entry.dayt).toDouble(), runningSumCar)
+        }.toTypedArray()
+    )
+    series3.color = android.graphics.Color.RED
 
-    // Optional settings
-    graph.title = "Preisvergleich"
+    // Wann wird was gezeichnet:
+    if (!showCo2) {
+        graph.addSeries(series)   // Zeitkartenpreis Linie - nur BreakEven
+        graph.addSeries(series2)  // Fahrtkosten - nur BreakEven
+    } else {
+        graph.addSeries(series2)  // Zug CO2 - nur CO2 Ansicht
+        graph.addSeries(series3)  // Auto CO2 - nur CO2 Ansicht
+    }
+
+    // Achsenbeschriftungen
+    graph.gridLabelRenderer.horizontalAxisTitle = if (showCo2) "Tage" else "Dauer der Zeitkarte"
+    graph.gridLabelRenderer.verticalAxisTitle = if (showCo2) "CO2 (kg)" else "Preis (€)"
+
+    graph.gridLabelRenderer.horizontalAxisTitleColor = android.graphics.Color.BLACK
+    graph.gridLabelRenderer.verticalAxisTitleColor = android.graphics.Color.BLACK
+    graph.gridLabelRenderer.labelsSpace = 10
+    graph.gridLabelRenderer.textSize = 28f
+
+    graph.gridLabelRenderer.gridColor = android.graphics.Color.GRAY
+    graph.gridLabelRenderer.isHighlightZeroLines = true
+    graph.gridLabelRenderer.horizontalAxisTitleColor = android.graphics.Color.BLACK
+    graph.gridLabelRenderer.verticalAxisTitleColor = android.graphics.Color.BLACK
+    graph.gridLabelRenderer.horizontalLabelsColor = android.graphics.Color.BLACK
+    graph.gridLabelRenderer.verticalLabelsColor = android.graphics.Color.BLACK
 
     graph.viewport.isScalable = true
     graph.viewport.isScrollable = true
@@ -113,6 +155,6 @@ fun createLineGraph(graph: GraphView, entries: List<VgFahrt>, seit: LocalDateTim
 //returns entries of VgFahrt nach einem bestimmten Datum
 private fun limitbytime(entries: List<VgFahrt>, seit: LocalDateTime): List<VgFahrt> {
 
-    return entries.filter{ it.dayt.isAfter(seit)}
+    return entries.filter{ !it.dayt.isBefore(seit)}
 
 }

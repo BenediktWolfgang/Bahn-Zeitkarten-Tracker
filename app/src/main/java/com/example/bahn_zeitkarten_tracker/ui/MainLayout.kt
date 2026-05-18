@@ -1,5 +1,6 @@
 package com.example.bahn_zeitkarten_tracker.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -17,30 +18,48 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bahn_zeitkarten_tracker.R
+import classes_and_Functions.VgFahrt
+import classes_and_Functions.Zeitkarte
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextLight
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 import java.util.Locale
 
 
+
 //LayoutMain für Grundlayout (auf allen Seiten gleich)
 @Composable
 fun MainLayout(){
+    val gespeicherteZeitkarten = remember {
+        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
+            addAll(zeitkarten)
+        }
+    } //dass Zeitkarten gespeichert werden können
+
+    val gespeicherteFahrten = remember {
+        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
+            addAll(vgfahrten)
+        }
+    } //dass Fahrten gespeichert werden können
+
+
     var selectedScreen by remember { mutableStateOf<Screen>(Screen.Home) } //welcher Screen ist gerade aktiv + default Home als erstes
     Scaffold( //Layout - untereinander
         modifier = Modifier
             .fillMaxSize() //ganzer Bildschirm
+            .background(Color.White)
             .systemBarsPadding(), //nicht unter Statusbar/Navigationsbar vom Gerät
         topBar = {
             AppHeader(title = selectedScreen.title)
@@ -63,16 +82,40 @@ fun MainLayout(){
         ) {
             when (selectedScreen) { //Inhalt zuweisen, je nach Screen
                 Screen.Home -> HomeLayout(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    zeitkarten = gespeicherteZeitkarten,
+                    fahrten = gespeicherteFahrten,
+                    onZeitkarteAdd = { neueZeitkarte ->
+                        gespeicherteZeitkarten.add(neueZeitkarte)
+                    },
+                    onFahrtAdd = { neueFahrt ->
+                        gespeicherteFahrten.add(neueFahrt)
+                    }
                 )
                 Screen.Map -> MapLayout(
                     modifier = Modifier.fillMaxSize()
                 )
                 Screen.BreakEven -> BreakEvenLayout(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    zeitkarten = gespeicherteZeitkarten,
+                    fahrten = gespeicherteFahrten,
+                    onZeitkarteAdd = { neueZeitkarte ->
+                        gespeicherteZeitkarten.add(neueZeitkarte)
+                    },
+                    onFahrtAdd = { neueFahrt ->
+                        gespeicherteFahrten.add(neueFahrt)
+                    }
                 )
                 Screen.CO2 -> CO2Layout(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    zeitkarten = gespeicherteZeitkarten,
+                    fahrten = gespeicherteFahrten,
+                    onZeitkarteAdd = { neueZeitkarte ->
+                        gespeicherteZeitkarten.add(neueZeitkarte)
+                    },
+                    onFahrtAdd = { neueFahrt ->
+                        gespeicherteFahrten.add(neueFahrt)
+                    }
                 )
             }
         }
@@ -90,14 +133,14 @@ fun AppHeader(title: String) {
             .padding(bottom = 16.dp) //Platz vor inhalt
             .height(56.dp)
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.menu_icon),
-            contentDescription = "Burgermenü Icon",
-            modifier = Modifier
-                .size(48.dp)
-                .padding(start = 16.dp)
-                .align(Alignment.CenterStart)
-        )
+//        Icon(
+//            painter = painterResource(id = R.drawable.menu_icon),
+//            contentDescription = "Burgermenü Icon",
+//            modifier = Modifier
+//                .size(48.dp)
+//                .padding(start = 16.dp)
+//                .align(Alignment.CenterStart)
+//        ) //not included in the Prototype
 
         Text(
             text = title.uppercase(Locale.GERMAN), //TODO:Wenn App English ändern

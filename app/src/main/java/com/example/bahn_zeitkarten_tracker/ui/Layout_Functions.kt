@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
@@ -16,9 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import classes_and_Functions.VgFahrt
 import classes_and_Functions.Zeitkarte
+import classes_and_Functions.createLineGraph
 import classes_and_Functions.formatDate
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
+import com.jjoe64.graphview.GraphView
+import java.time.LocalDateTime
 
 //SuchBar für die Zeitkarte (CO2 und BreakEven)
 @Composable
@@ -86,4 +92,38 @@ fun ZeitkartenSuche(
             }
         }
     }
+}
+
+
+//Graphview(xml) in compose einbinden -> als AndroidView
+//Code von ChatGPT kopiert und an unsere situation angepasst (Prompt siehe Readme - KI Nutzung)
+@Composable
+fun LineGraphView(
+    entries: List<VgFahrt>,
+    seit: LocalDateTime,
+    bis: LocalDateTime,
+    zeitkartenPreis: Double = 0.0,
+    showCo2: Boolean = false,
+    showCar: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    AndroidView(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(end= 16.dp),
+        factory = { context ->
+            GraphView(context)
+        },
+        update = { graph ->
+            createLineGraph(
+                graph = graph,
+                entries = entries,
+                seit = seit,
+                bis = bis,
+                ZeitkartenPreis = zeitkartenPreis,
+                showCo2 = showCo2
+            )
+        }
+    )
 }

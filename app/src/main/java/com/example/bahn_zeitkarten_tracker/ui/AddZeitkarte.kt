@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import classes_and_Functions.Zeitkarte
 import classes_and_Functions.converttoDate
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
+import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 
 @Composable
 fun AddZeitkarte(
@@ -66,7 +67,7 @@ fun AddZeitkarte(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Name der Zeitkarte") },
+            label = { Text("Name der Zeitkarte*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -74,7 +75,7 @@ fun AddZeitkarte(
         OutlinedTextField(
             value = firma,
             onValueChange = { firma = it },
-            label = { Text("Firma") },
+            label = { Text("Firma*") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -82,15 +83,15 @@ fun AddZeitkarte(
         OutlinedTextField(
             value = preis,
             onValueChange = { preis = it },
-            label = { Text("Preis in €") },
+            label = { Text("Preis in € *") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
         OutlinedTextField(
-            value = giltb,
+            value = giltv,
             onValueChange = { giltv = it },
-            label = { Text("Gültig von (z.B. 01012026)") },
+            label = { Text("Gültig von * (z.B. 01012026)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -98,13 +99,20 @@ fun AddZeitkarte(
         OutlinedTextField(
             value = giltb,
             onValueChange = { giltb = it },
-            label = { Text("Gültig bis (z.B. 31122026)") },
+            label = { Text("Gültig bis * (z.B. 31122026)") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
+        Text(    text = "* Pflichtfelder",
+            fontSize = 12.sp,
+            color = AppTextMuted
+        )
+
         OutlinedButton(
             onClick = {
+                if (giltv.isBlank() || giltb.isBlank() || name.isBlank()) return@OutlinedButton
+
                 val neueZeitkarte = Zeitkarte(
                     name = name,
                     preis = preis.toIntOrNull() ?: 0,
@@ -133,16 +141,3 @@ fun AddZeitkarte(
 
 
 
-@Preview( //vorschau in Android studio
-    name = "Vorschau AddZeitkarte",
-    showBackground = true,
-    device = "id:pixel_9"
-)
-@Composable //Funktion, dass es  in Preview anzeigt
-fun AddZeitkartePreview() {
-    AddZeitkarte (
-        modifier = Modifier.fillMaxSize(),
-        onBackClick = {},
-        onSaveClick = {}
-    )
-}

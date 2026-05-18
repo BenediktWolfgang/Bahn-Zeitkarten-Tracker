@@ -3,7 +3,7 @@ package classes_and_Functions
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class Zeitkarte (
+data class Zeitkarte (
     val name:       String,
     val preis:      Int,
     val firma:      String?,

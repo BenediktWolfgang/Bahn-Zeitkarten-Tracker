@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
@@ -34,6 +36,7 @@ import java.time.LocalDateTime
 @Composable
 fun AddFahrt(
     modifier: Modifier = Modifier,
+    zeitkarten: List<Zeitkarte>, //Liste zum Auswählen
     onBackClick: () -> Unit,
     onSaveClick: (VgFahrt) -> Unit
 ){
@@ -42,11 +45,13 @@ fun AddFahrt(
     var dist by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
+    var zeitkarte by remember {mutableStateOf<Zeitkarte?>(null)}
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         TextButton(
@@ -106,6 +111,11 @@ fun AddFahrt(
             singleLine = true
         )
 
+        ZeitkartenSuche(
+            zeitkarten = zeitkarten,
+            onZeitkarteSelected = {zeitkarte = it}
+        )
+
         //wen datum und/oder Uhrzeit leer -> Zeitpunkt jetzt
         //sonst datum formattieren
         val fahrtZeitpunkt = if(date.isBlank() || time.isBlank()) {
@@ -122,7 +132,8 @@ fun AddFahrt(
                     von = von,
                     bis = bis,
                     dist = dist.toIntOrNull() ?: 0,
-                    dayt = fahrtZeitpunkt
+                    dayt = fahrtZeitpunkt,
+                    zeitkarte = zeitkarte
                 )
                 onSaveClick(neueFahrt)
             },
@@ -143,17 +154,3 @@ fun AddFahrt(
 }
 
 
-
-@Preview( //vorschau in Android studio
-    name = "Vorschau AddFahrt",
-    showBackground = true,
-    device = "id:pixel_9"
-)
-@Composable //Funktion, dass es  in Preview anzeigt
-fun AddFahrtPreview() {
-    AddFahrt (
-        modifier = Modifier.fillMaxSize(),
-        onBackClick = {},
-        onSaveClick = {}
-    )
-}

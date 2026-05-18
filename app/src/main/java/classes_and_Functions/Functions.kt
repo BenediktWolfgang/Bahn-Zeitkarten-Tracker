@@ -87,18 +87,27 @@ fun SumRides(fahrten : List<VgFahrt>):Int{
 
 //Datum ohne Uhrzeit
 fun converttoDate(futuredate: String): LocalDate{
-    val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
-    return LocalDate.parse(futuredate, formatter)
+    return try {
+        val clean = futuredate.replace(".", "").replace("/", "").replace("-", "")
+        val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
+        LocalDate.parse(clean, formatter)
+    } catch (e: Exception) {
+        LocalDate.now()
+    }
 } //mit String, weil bei Int 1. Null verlorengehen würde
 
 
 //Datum mit Uhrzeit
 fun converttoDateTime(dateinput: String, timeinput: String): LocalDateTime {
-    val date = converttoDate(dateinput)
-    val timeFormatter = DateTimeFormatter.ofPattern("HHmm")
-    val time = LocalTime.parse(timeinput, timeFormatter)
-
-    return LocalDateTime.of(date, time)
+    return try {
+        val date = converttoDate(dateinput)
+        val clean = timeinput.replace(".", "").replace(":", "")
+        val timeFormatter = DateTimeFormatter.ofPattern("HHmm")
+        val time = LocalTime.parse(clean, timeFormatter)
+        LocalDateTime.of(date, time)
+    }catch(e:Exception) {
+        LocalDateTime.now()
+    }
 }
 fun formatDate(date: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")

@@ -17,27 +17,26 @@ import androidx.appcompat.app.AppCompatActivity
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory
 
 //Funktionen und Klassenimporte
-
-//import classes_and_Functions.*
+import classes_and_Functions.*
 //import com.example.bahn_zeitkarten_tracker.databinding.ActivityMainBinding
-//import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.GraphView
 
 
 //Main
 
 class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.hide() //schwarzen Header ausblenden
         //create graphics factory for mapsforge to display maps
         AndroidGraphicFactory.createInstance(this)
 
         //ui einbinden
-        setContent {
+        setContent { //ui "einbinden"
             MainLayout()
         }
-
     }
 }
 
@@ -55,4 +54,3 @@ fun RemainingTime(a: Date, b: Date): Int {
     val x = ChronoUnit.DAYS.between(da, db)
     return x.toInt()
 }
-
