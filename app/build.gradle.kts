@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -63,15 +64,21 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.play.services.maps)
     implementation(libs.ui)
 
     implementation ("com.jjoe64:graphview:4.2.2")
 
     //mapsforge
-    implementation("com.github.mapsforge.mapsforge:mapsforge-map-android:0.28.0@jar")
+    implementation("org.mapsforge:mapsforge-core:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-map:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-map-reader:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-themes:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-map-android:0.25.0@jar")
     implementation("com.caverock:androidsvg:1.4")
-    implementation("com.github.mapsforge.mapsforge:mapsforge-core:0.28.0@jar")
-    implementation("com.github.mapsforge.mapsforge:mapsforge-poi:0.28.0@jar")
+    implementation("org.mapsforge:mapsforge-core:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-poi:0.25.0@jar")
+    implementation("org.mapsforge:mapsforge-poi-android:0.25.0@jar")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 

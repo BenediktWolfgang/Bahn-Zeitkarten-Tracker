@@ -14,6 +14,7 @@ import androidx.core.view.KeyEventDispatcher
 import com.example.bahn_zeitkarten_tracker.ui.MainLayout
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import org.mapsforge.map.android.graphics.AndroidGraphicFactory
 
 //Funktionen und Klassenimporte
 
@@ -28,6 +29,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //create graphics factory for mapsforge to display maps
+        AndroidGraphicFactory.createInstance(this)
 
         //ui einbinden
         setContent {
