@@ -44,7 +44,7 @@ fun CalcPrice(dist: Int): Int{
 }
 
 
-//TODO: beschriften und schöner machen
+//TODO: beschriften und schöner machen -> nope können wir nicht verwenden wg Compose...
 //Diese Funktion erstellt einen Graphen und stellt den dann dar.
 // Einen Graphview muss man zuerst erstellen und mitgeben, dann erstellt es in diesem GraphView die
 // x und y Achse basierend auf den addedSeries. Eine Linie ist die gerade Linie des ZeitkartenPreises

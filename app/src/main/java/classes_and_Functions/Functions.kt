@@ -33,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 
@@ -65,20 +67,39 @@ fun SumPrice(Fahrten : List<VgFahrt>): Int {
 
 }
 
-
-fun converttoDate(futuredate: Int): LocalDate {
-
-    val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
-
-    val date = LocalDate.parse(
-        futuredate.toString(),
-        formatter
-    )
-
-    return date
-
+//returns number of past Travels from a List of past Travels
+fun SumRides(fahrten : List<VgFahrt>):Int{
+    return fahrten.size
 }
 
+//fun converttoDate(futuredate: Int): LocalDate {
+//
+//    val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
+//
+//    val date = LocalDate.parse(
+//        futuredate.toString(),
+//        formatter
+//    )
+//
+//    return date
+//
+//}
+
+//Datum ohne Uhrzeit
+fun converttoDate(futuredate: String): LocalDate{
+    val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
+    return LocalDate.parse(futuredate, formatter)
+} //mit String, weil bei Int 1. Null verlorengehen würde
+
+
+//Datum mit Uhrzeit
+fun converttoDateTime(dateinput: String, timeinput: String): LocalDateTime {
+    val date = converttoDate(dateinput)
+    val timeFormatter = DateTimeFormatter.ofPattern("HHmm")
+    val time = LocalTime.parse(timeinput, timeFormatter)
+
+    return LocalDateTime.of(date, time)
+}
 fun formatDate(date: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     return date.format(formatter)

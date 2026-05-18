@@ -54,12 +54,12 @@ fun MainLayout(){
             )
         }
     ) {
-        paddingValues ->
+                paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 8.dp)
         ) {
             when (selectedScreen) { //Inhalt zuweisen, je nach Screen
                 Screen.Home -> HomeLayout(
@@ -87,7 +87,7 @@ fun AppHeader(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp)
+            .padding(bottom = 16.dp) //Platz vor inhalt
             .height(56.dp)
     ) {
         Icon(
@@ -127,37 +127,6 @@ fun MenuBar(
         }
     }
 }//End Menubar
-
-////TODO: Löschen:
-//        MenuBarItem (
-//            selected = true,
-//            icon = R.drawable.ticket_icon,
-//            label = "Tickets",
-//            onClick = {}
-//        )
-//
-//        MenuBarItem (
-//            selected = false,
-//            icon = R.drawable.map_icon,
-//            label = "Karte",
-//            onClick = {}
-//        )
-//
-//        MenuBarItem (
-//            selected = false,
-//            icon = R.drawable.euro_icon,
-//            label = "Analyse",
-//            onClick = {}
-//        )
-//
-//        MenuBarItem (
-//            selected = false,
-//            icon = R.drawable.leaf_icon,
-//            label = "CO2",
-//            onClick = {}
-//        )
-//    }
-//}//End ManuBar
 
 //MenuBarItem:
 @Composable

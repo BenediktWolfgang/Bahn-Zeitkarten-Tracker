@@ -6,13 +6,14 @@ import java.time.temporal.ChronoUnit
 class Zeitkarte (
     val name:       String,
     val preis:      Int,
-    val firma:      String,
-    val link:       String,
+    val firma:      String?,
+    val link:       String?,
     val giltv: LocalDate,
     val giltb: LocalDate
 
     // giltvon und giltbis sind inklusive, d.h. deren Datum ist noch in der Gültigkeit inkludiert
     // alle Daten sind vom User selbst bestimmbar.
+    //Preis safed in cents.
 
 ){
     fun giltNochTage(): Int {

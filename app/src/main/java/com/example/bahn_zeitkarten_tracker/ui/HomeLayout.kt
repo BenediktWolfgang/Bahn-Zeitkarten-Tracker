@@ -32,77 +32,89 @@ import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 import classes_and_Functions.Zeitkarte
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import classes_and_Functions.VgFahrt
 import classes_and_Functions.formatDate
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
-//dummy Zeitkarten:
-val zeitkarten = listOf(
-    Zeitkarte(
-        name = "Klimaticket Österreich Jugend",
-        preis = 1095,
-        firma = "ÖBB",
-        link = "",
-        giltv = LocalDate.of(2026, 1, 1),
-        giltb = LocalDate.of(2026, 12, 31)
-    ),
-    Zeitkarte(
-        name = "Wiener Linien Jahreskarte",
-        preis = 365,
-        firma = "Wiener Linien",
-        link = "",
-        giltv = LocalDate.of(2025,5,31),
-        giltb = LocalDate.of(2026,5,30)
-    ),
-    Zeitkarte(
-        name = "Klimaticket Österreich Jugend",
-        preis = 1095,
-        firma = "ÖBB",
-        link = "",
-        giltv = LocalDate.of(2026, 1, 1),
-        giltb = LocalDate.of(2026, 12, 31)
-    )
-)
-
-val vgfahrten = listOf(
-    VgFahrt(
-        von = "Wien",
-        bis = "Salzburg",
-        dist = 300,
-        dayt = LocalDateTime.of(2026, 5, 11, 15, 22)
-    ),
-    VgFahrt(
-        von = "Wien",
-        bis = "Graz",
-        dist = 200,
-        dayt = LocalDateTime.of(2026, 5, 15, 12, 22)
-    )
-)
 
 @Composable
-fun HomeLayout(
+fun HomeLayout( //Grundlayout in Home
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+//Zeitkarten:
+    //Eingabe für Zeitkarten Defaultmäßig falsch (zeigt Homescreen)
+    var showAddZeitkarte by remember { mutableStateOf(false) }
 
-        ZeitkartenSection(
-            modifier = modifier.weight(1f)
-        )
+    val gespeicherteZeitkarten = remember {
+        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
+            addAll(zeitkarten)
+        }
+    } //dass Zeitkarten gespeichert werden können
 
-        FahrtenSection(
-            modifier = modifier.weight(1f)
-        )
+//Fahrten
+    //Eingabe für Fahrten Defaultmäßig falsch (zeigt Homescreen)
+    var showAddFahrt by remember { mutableStateOf(false) }
+
+    val gespeicherteFahrten = remember {
+        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
+            addAll(vgfahrten)
+        }
+    } //dass Fahrten gespeichert werden können
+
+    if(showAddZeitkarte) {
+        AddZeitkarte(
+            modifier = modifier,
+            onBackClick = {
+                showAddZeitkarte = false
+            },
+        ) { neueZeitkarte ->
+            gespeicherteZeitkarten.add(neueZeitkarte)
+            showAddZeitkarte = false
+        }
+    } else if(showAddFahrt) {
+        AddFahrt (
+            modifier = modifier,
+            onBackClick = {
+                showAddFahrt = false
+            },
+        ) { neueFahrt ->
+            gespeicherteFahrten.add(neueFahrt)
+            showAddFahrt = false
+        }
+    } else {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+
+            ZeitkartenSection(
+                modifier = Modifier.weight(1f),
+                zeitkarten = gespeicherteZeitkarten,
+                onAddClick = {
+                    showAddZeitkarte = true
+                } //Zeitkarte hinzufügen
+            )
+
+            FahrtenSection(
+                modifier = Modifier.weight(1f),
+                vgfahrten = gespeicherteFahrten,
+                onAddClick = {
+                    showAddFahrt = true
+                } //Fahrt hinzufügen
+            )
+        }
     }
 }
 
 @Composable
-fun ZeitkartenSection(
-    modifier:Modifier = Modifier
+fun ZeitkartenSection( //Ab Meine Zeitkarten
+    modifier:Modifier = Modifier,
+    zeitkarten: List<Zeitkarte>,
+    onAddClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -110,9 +122,7 @@ fun ZeitkartenSection(
         SectionHeader(
             title = "Meine Zeitkarten",
             buttonText = "+ Neue Zeitkarte",
-            onButtonClick = {
-                //TODO: PopUp verknüpfen
-            }
+            onButtonClick = onAddClick
         )
 
         LazyColumn( //weil Scrollbar
@@ -128,8 +138,10 @@ fun ZeitkartenSection(
 
 
 @Composable
-fun FahrtenSection(
-    modifier:Modifier = Modifier
+fun FahrtenSection( //ab Meine Fahrten
+    modifier:Modifier = Modifier,
+    vgfahrten: List<VgFahrt>,
+    onAddClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -137,9 +149,7 @@ fun FahrtenSection(
         SectionHeader (
             title= "Meine Fahrten",
             buttonText = "+ Neue Fahrt",
-            onButtonClick ={
-                //TODO: PopUp verknüpfen
-            }
+            onButtonClick =onAddClick
         )
 
         LazyColumn( //weil Scrollbar
@@ -154,12 +164,12 @@ fun FahrtenSection(
 }
 
 @Composable
-fun SectionHeader (
+fun SectionHeader ( //Meine Zeitkarten und Meine Fahrten "Header" mit Button
     title:String,
     buttonText: String,
     onButtonClick: () -> Unit
 ){
-    Row(
+    Row( //Überschrift
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp),
@@ -171,7 +181,7 @@ fun SectionHeader (
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
         )
-        OutlinedButton (
+        OutlinedButton ( //Button
             onClick = onButtonClick,
             border = BorderStroke(
                 width = 1.dp,
@@ -192,7 +202,7 @@ fun SectionHeader (
 }
 
 @Composable
-fun TicketCard(
+fun TicketCard( //eine Box aka Card einer Zeitkarte
 zeitkarte: Zeitkarte
 ) {
     Card(
@@ -223,7 +233,7 @@ zeitkarte: Zeitkarte
                 )
             }
 
-            DashedVerticalDivider()
+            DashedVerticalDivider() //Stricklierte Linie
 
             //rechter Bereich
             Column(
@@ -241,12 +251,12 @@ zeitkarte: Zeitkarte
                 )
 
                 Text(
-                    text = zeitkarte.firma,
+                    text = zeitkarte.firma?: "",
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text("Gültig von: ${formatDate(zeitkarte.giltv)}")
                 Text("Gültig bis: ${formatDate(zeitkarte.giltb)}")
-                Text("Preis: ${zeitkarte.preis} €")
+                Text("Preis: ${zeitkarte.preis/100.00} €")
 
             }
         }
@@ -254,7 +264,7 @@ zeitkarte: Zeitkarte
 } //end TicketCard
 
 @Composable
-fun DashedVerticalDivider() { //vertikale linie
+fun DashedVerticalDivider() { //vertikale linie - strichliert
     Canvas(
         modifier = Modifier
             .fillMaxHeight()
@@ -274,7 +284,7 @@ fun DashedVerticalDivider() { //vertikale linie
 }
 
 @Composable
-fun FahrtenCard(
+fun FahrtenCard( //eine Card für eine Fahrt
     vgfahrt: VgFahrt
 ) {
     Card(
@@ -289,7 +299,7 @@ fun FahrtenCard(
                 .weight(1f) //restlicher Platz
         ) {
             Text(
-                text = "Von - Bis",
+                text = "${vgfahrt.von} - ${vgfahrt.bis}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = AppPrimary,
@@ -297,13 +307,13 @@ fun FahrtenCard(
 
             )
 
-            Text(
+            Text( //Klimaticket //TODO: Noch pointer bauen und verknüpfen
                 text = "Klimaticket Österreich",
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text("Datum: ")
-            Text("Km: ")
-            Text("Preis: 1095 €")
+            Text("Datum: ${formatDate(vgfahrt.dayt.toLocalDate())}")
+            Text("Km: ${vgfahrt.dist/10.0}")
+            Text("Preis: ${vgfahrt.price/100.0} €")
 
         }
     }
@@ -315,7 +325,7 @@ fun FahrtenCard(
     showBackground = true,
     device = "id:pixel_9"
 )
-@Composable //Funktion, dass es MainLayout in Preview anzeigt
+@Composable //Funktion, dass es  in Preview anzeigt
 fun HomeLayoutPreview() {
     HomeLayout(
         modifier = Modifier.fillMaxSize()

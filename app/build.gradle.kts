@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.ui)
 
     implementation ("com.jjoe64:graphview:4.2.2")
+    implementation(libs.ui.text)
 
     //mapsforge
     implementation("org.mapsforge:mapsforge-core:0.25.0@jar")
