@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import classes_and_Functions.AvgPrice
 import classes_and_Functions.SumPrice
 import classes_and_Functions.BreakEvenSim
+import classes_and_Functions.SumRides
 import classes_and_Functions.Zeitkarte
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted

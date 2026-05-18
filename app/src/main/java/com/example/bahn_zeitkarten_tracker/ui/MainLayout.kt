@@ -37,7 +37,7 @@ import java.util.Locale
 //LayoutMain für Grundlayout (auf allen Seiten gleich)
 @Composable
 fun MainLayout(){
-    var selectedScreen by remember { mutableStateOf<Screen>(Screen.BreakEven) } //welcher Screen ist gerade aktiv + default Home als erstes
+    var selectedScreen by remember { mutableStateOf<Screen>(Screen.Home) } //welcher Screen ist gerade aktiv + default Home als erstes
     Scaffold( //Layout - untereinander
         modifier = Modifier
             .fillMaxSize() //ganzer Bildschirm

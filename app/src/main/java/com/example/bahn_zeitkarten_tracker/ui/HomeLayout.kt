@@ -32,35 +32,89 @@ import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
 import classes_and_Functions.Zeitkarte
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import classes_and_Functions.VgFahrt
 import classes_and_Functions.formatDate
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 
 @Composable
 fun HomeLayout( //Grundlayout in Home
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+//Zeitkarten:
+    //Eingabe für Zeitkarten Defaultmäßig falsch (zeigt Homescreen)
+    var showAddZeitkarte by remember { mutableStateOf(false) }
 
-        ZeitkartenSection(
-            modifier = Modifier.weight(1f)
-        )
+    val gespeicherteZeitkarten = remember {
+        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
+            addAll(zeitkarten)
+        }
+    } //dass Zeitkarten gespeichert werden können
 
-        FahrtenSection(
-            modifier = Modifier.weight(1f)
-        )
+//Fahrten
+    //Eingabe für Fahrten Defaultmäßig falsch (zeigt Homescreen)
+    var showAddFahrt by remember { mutableStateOf(false) }
+
+    val gespeicherteFahrten = remember {
+        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
+            addAll(vgfahrten)
+        }
+    } //dass Fahrten gespeichert werden können
+
+    if(showAddZeitkarte) {
+        AddZeitkarte(
+            modifier = modifier,
+            onBackClick = {
+                showAddZeitkarte = false
+            },
+        ) { neueZeitkarte ->
+            gespeicherteZeitkarten.add(neueZeitkarte)
+            showAddZeitkarte = false
+        }
+    } else if(showAddFahrt) {
+        AddFahrt (
+            modifier = modifier,
+            onBackClick = {
+                showAddFahrt = false
+            },
+        ) { neueFahrt ->
+            gespeicherteFahrten.add(neueFahrt)
+            showAddFahrt = false
+        }
+    } else {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+
+            ZeitkartenSection(
+                modifier = Modifier.weight(1f),
+                zeitkarten = gespeicherteZeitkarten,
+                onAddClick = {
+                    showAddZeitkarte = true
+                } //Zeitkarte hinzufügen
+            )
+
+            FahrtenSection(
+                modifier = Modifier.weight(1f),
+                vgfahrten = gespeicherteFahrten,
+                onAddClick = {
+                    showAddFahrt = true
+                } //Fahrt hinzufügen
+            )
+        }
     }
 }
 
 @Composable
 fun ZeitkartenSection( //Ab Meine Zeitkarten
-    modifier:Modifier = Modifier
+    modifier:Modifier = Modifier,
+    zeitkarten: List<Zeitkarte>,
+    onAddClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -68,9 +122,7 @@ fun ZeitkartenSection( //Ab Meine Zeitkarten
         SectionHeader(
             title = "Meine Zeitkarten",
             buttonText = "+ Neue Zeitkarte",
-            onButtonClick = {
-                //TODO: PopUp verknüpfen
-            }
+            onButtonClick = onAddClick
         )
 
         LazyColumn( //weil Scrollbar
@@ -87,7 +139,9 @@ fun ZeitkartenSection( //Ab Meine Zeitkarten
 
 @Composable
 fun FahrtenSection( //ab Meine Fahrten
-    modifier:Modifier = Modifier
+    modifier:Modifier = Modifier,
+    vgfahrten: List<VgFahrt>,
+    onAddClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -95,9 +149,7 @@ fun FahrtenSection( //ab Meine Fahrten
         SectionHeader (
             title= "Meine Fahrten",
             buttonText = "+ Neue Fahrt",
-            onButtonClick ={
-                //TODO: PopUp verknüpfen
-            }
+            onButtonClick =onAddClick
         )
 
         LazyColumn( //weil Scrollbar
