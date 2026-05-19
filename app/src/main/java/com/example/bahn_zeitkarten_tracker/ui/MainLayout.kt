@@ -138,6 +138,7 @@ fun AppHeader(
             .fillMaxWidth()
             .padding(bottom = 16.dp) //Platz vor inhalt
             .height(56.dp)
+            .background(Color.White)
     ) {
         Icon(
             painter = painterResource(id = icon),
