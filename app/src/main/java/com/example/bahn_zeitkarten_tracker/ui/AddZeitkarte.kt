@@ -110,6 +110,7 @@ fun AddZeitkarte(
             onClick = {
                 if (giltv.isBlank() || giltb.isBlank() || name.isBlank()) return@OutlinedButton
 
+                //Crash behebung mit KI
                 val preisCent = preis //damit Preis auch mit Komma oder Punkt eingegeben werden kann
                     .replace(",",".")
                     .toDoubleOrNull()

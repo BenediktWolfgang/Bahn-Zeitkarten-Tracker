@@ -88,6 +88,7 @@ fun SumRides(fahrten : List<VgFahrt>):Int{
 //Datum ohne Uhrzeit
 fun converttoDate(futuredate: String): LocalDate{
     return try {
+        //Crash behebung teils mithilfe von KI
         val clean = futuredate.replace(".", "").replace("/", "").replace("-", "")
         val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
         LocalDate.parse(clean, formatter)

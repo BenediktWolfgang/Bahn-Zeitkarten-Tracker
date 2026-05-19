@@ -134,6 +134,7 @@ fun createLineGraph(
     graph.gridLabelRenderer.horizontalAxisTitle = if (showCo2) "Tage" else "Dauer der Zeitkarte"
     graph.gridLabelRenderer.verticalAxisTitle = if (showCo2) "CO2 (kg)" else "Preis (€)"
 
+    //Graph wurde vorher nicht schön angezeigt - KI
     graph.gridLabelRenderer.horizontalAxisTitleColor = android.graphics.Color.BLACK
     graph.gridLabelRenderer.verticalAxisTitleColor = android.graphics.Color.BLACK
     graph.gridLabelRenderer.labelsSpace = 10

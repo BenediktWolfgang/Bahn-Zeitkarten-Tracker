@@ -59,7 +59,7 @@ fun MainLayout(){
         modifier = Modifier
             .fillMaxSize() //ganzer Bildschirm
             .background(Color.White)
-            .systemBarsPadding(), //nicht unter Statusbar/Navigationsbar vom Gerät
+            .systemBarsPadding(), //nicht unter Statusbar/Navigationsbar vom Gerät -> Aus ChatGPT
         topBar = {
             AppHeader(title = selectedScreen.title, icon = selectedScreen.icon )
         },
@@ -208,7 +208,7 @@ fun RowScope.MenuBarItem(
 }
 
 
-//Vorschau für Layout erstellung verwendet
+//Vorschau für Layout erstellung verwendet -> aus KI
 @Preview( //vorschau in Android studio
     name = "Vorschau MainLayout",
     showBackground = true,

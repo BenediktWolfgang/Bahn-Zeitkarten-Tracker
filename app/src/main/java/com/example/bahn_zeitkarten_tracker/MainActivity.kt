@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide() //schwarzen Header ausblenden
         //create graphics factory for mapsforge to display maps
         AndroidGraphicFactory.createInstance(this)
+        //aus KI, weil es nach dem commit mit der Map eine seperaten header gab
 
         //ui einbinden
         setContent { //ui "einbinden"
