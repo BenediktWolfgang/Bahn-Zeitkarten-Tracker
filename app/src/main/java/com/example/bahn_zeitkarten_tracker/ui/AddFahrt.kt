@@ -116,18 +116,19 @@ fun AddFahrt(
             onZeitkarteSelected = {zeitkarte = it}
         )
 
-        //wen datum und/oder Uhrzeit leer -> Zeitpunkt jetzt
-        //sonst datum formattieren
-        val fahrtZeitpunkt = if(date.isBlank() || time.isBlank()) {
-            LocalDateTime.now()
-        } else {
-            converttoDateTime(date, time)
-        }
-
 
 
         OutlinedButton(
             onClick = {
+                //wen datum und/oder Uhrzeit leer -> Zeitpunkt jetzt
+                //sonst datum formattieren
+                val fahrtZeitpunkt = if(date.isBlank() || time.isBlank()) {
+                    LocalDateTime.now()
+                } else {
+                    converttoDateTime(date, time)
+                }
+
+
                 val neueFahrt = VgFahrt(
                     von = von,
                     bis = bis,

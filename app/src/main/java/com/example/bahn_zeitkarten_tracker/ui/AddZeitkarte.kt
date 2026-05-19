@@ -1,6 +1,5 @@
 package com.example.bahn_zeitkarten_tracker.ui
 
-import android.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -21,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import classes_and_Functions.Zeitkarte
@@ -113,9 +110,15 @@ fun AddZeitkarte(
             onClick = {
                 if (giltv.isBlank() || giltb.isBlank() || name.isBlank()) return@OutlinedButton
 
+                val preisCent = preis //damit Preis auch mit Komma oder Punkt eingegeben werden kann
+                    .replace(",",".")
+                    .toDoubleOrNull()
+                    ?.times(100) //Euro -> Cent
+                    ?.toInt()?: 0
+
                 val neueZeitkarte = Zeitkarte(
                     name = name,
-                    preis = preis.toIntOrNull() ?: 0,
+                    preis = preisCent,
                     firma = firma.ifBlank { null },
                     link = null,
                     giltv = converttoDate(giltv),

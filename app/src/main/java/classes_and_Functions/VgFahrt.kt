@@ -53,11 +53,11 @@ fun CalcPrice(dist: Int): Int{
 // x und y Achse basierend auf den addedSeries. Eine Linie ist die gerade Linie des ZeitkartenPreises
 // dessen y-Wert über die Zeit gleich bleibt, die andere Linie ist der sich aufsummierende
 // Wert von den Vergangenen Fahrten, die man dann mit dem Zeitkartenpreis graphisch vergeleichen
-// kann. Außerdem kann man Fahrten limitieren basierend auf der Zeit mit seit.
-// Bei ShowCo2 zeigt es die Co2 Ersparnisse die man über die Zeit gemacht hat.
+// kann. Es werden etweder die Fahrten für die Dauer der Zeitkarte angezeit oder von der Ersten bis zur letzten Fahrt (seit, bis).
+// Bei ShowCo2 zeigt es den Co2 Verbrauch den man über die Zeit gemacht hat von Zug und Auto
 // ZeitkartenPreis soll nur dann nicht benutzt werden wenn man Co2 mappt
 
-// ! XML Graph in Compose eingebunden, da wir den Graph schon als xml hatten und zum neuerstellen die Zeit nicht gereicht hätte
+// ! XML Graph in Compose eingebunden
 // Dafür KI befragt, wie das geht (siehe KI Nutzung)
 
 fun createLineGraph(
@@ -76,12 +76,11 @@ fun createLineGraph(
     // X Achse: Tage Dauer der Zeitkarte
     val maxX = ChronoUnit.DAYS.between(seit, bis).toDouble()
 
-    //weil Graph zu breit (von KI vorschläge geben lassen -> dieser hat funktioniert)
+    //weil Graph zu breit bzw nicht schön angezeigt wurde (von KI vorschläge geben lassen -> dieser hat funktioniert)
     graph.viewport.isXAxisBoundsManual = true
     graph.viewport.setMinX(0.0)
     graph.viewport.setMaxX(maxX)
     graph.viewport.isYAxisBoundsManual = false
-//    graph.viewport.setMinY(0.0)
 
     val maxFahrtkosten = entries2.sumOf { it.price.toDouble() / 100.0 }
     val maxY = if (showCo2) {
@@ -131,7 +130,7 @@ fun createLineGraph(
         graph.addSeries(series3)  // Auto CO2 - nur CO2 Ansicht
     }
 
-    // Achsenbeschriftungen
+    // Achsenbeschriftungen, je nach Anzeige
     graph.gridLabelRenderer.horizontalAxisTitle = if (showCo2) "Tage" else "Dauer der Zeitkarte"
     graph.gridLabelRenderer.verticalAxisTitle = if (showCo2) "CO2 (kg)" else "Preis (€)"
 
@@ -152,7 +151,7 @@ fun createLineGraph(
 }
 
 
-//returns entries of VgFahrt nach einem bestimmten Datum
+//returns entries of VgFahrt ab einem bestimmten Datum
 private fun limitbytime(entries: List<VgFahrt>, seit: LocalDateTime): List<VgFahrt> {
 
     return entries.filter{ !it.dayt.isBefore(seit)}

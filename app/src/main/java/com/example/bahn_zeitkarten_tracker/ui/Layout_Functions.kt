@@ -40,7 +40,7 @@ fun ZeitkartenSuche(
         zeitkarte.name.contains(zeitkarteInput, ignoreCase = true) ||
                 (zeitkarte.firma?.contains(zeitkarteInput, ignoreCase = true) == true)
     }
-    Column() {
+    Column() { //Visuelle darstellung
         OutlinedTextField(
             value = zeitkarteInput,
             onValueChange = { neuerText ->
@@ -96,7 +96,7 @@ fun ZeitkartenSuche(
 
 
 //Graphview(xml) in compose einbinden -> als AndroidView
-//Code von ChatGPT kopiert und an unsere situation angepasst (Prompt siehe Readme - KI Nutzung)
+//Code von KI kopiert und an unsere situation angepasst (Prompt siehe Readme - KI Nutzung)
 @Composable
 fun LineGraphView(
     entries: List<VgFahrt>,

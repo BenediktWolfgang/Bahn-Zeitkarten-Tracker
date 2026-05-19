@@ -51,21 +51,12 @@ fun HomeLayout( //Grundlayout in Home
     //Eingabe für Zeitkarten Defaultmäßig falsch (zeigt Homescreen)
     var showAddZeitkarte by remember { mutableStateOf(false) }
 
-//    val gespeicherteZeitkarten = remember {
-//        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
-//            addAll(zeitkarten)
-//        }
-//    } //dass Zeitkarten gespeichert werden können
 
 //Fahrten
     //Eingabe für Fahrten Defaultmäßig falsch (zeigt Homescreen)
     var showAddFahrt by remember { mutableStateOf(false) }
+// -> wenn eines der Beiden True wird die jeweilige Subseite angezeigt
 
-//    val gespeicherteFahrten = remember {
-//        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
-//            addAll(vgfahrten)
-//        }
-//    } //dass Fahrten gespeichert werden können
 
     if(showAddZeitkarte) {
         AddZeitkarte(
@@ -118,6 +109,8 @@ fun ZeitkartenSection( //Ab Meine Zeitkarten
     zeitkarten: List<Zeitkarte>,
     onAddClick: () -> Unit
 ) {
+    val sortierteZeitkarten = zeitkarten.sortedByDescending { it.giltb }  // dass Zeitkarten sortiert sind nach aktualität
+
     Column(
         modifier = modifier
     ) {
@@ -127,11 +120,20 @@ fun ZeitkartenSection( //Ab Meine Zeitkarten
             onButtonClick = onAddClick
         )
 
-        LazyColumn( //weil Scrollbar
-            verticalArrangement = Arrangement.spacedBy(16.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
-        ) {
-            items(zeitkarten) { zeitkarte ->
-                TicketCard(zeitkarte = zeitkarte)
+        if(sortierteZeitkarten.isEmpty()) {
+            Text(
+                text = "Noch keine Zeitkarten gespeichert",
+                color = AppTextMuted,
+                modifier = Modifier.padding(16.dp)
+            )
+        } else {
+
+            LazyColumn( //weil Scrollbar
+                verticalArrangement = Arrangement.spacedBy(16.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
+            ) {
+                items(sortierteZeitkarten) { zeitkarte ->
+                    TicketCard(zeitkarte = zeitkarte)
+                }
             }
         }
     }
@@ -145,6 +147,9 @@ fun FahrtenSection( //ab Meine Fahrten
     vgfahrten: List<VgFahrt>,
     onAddClick: () -> Unit
 ) {
+    val sortierteFahrten = vgfahrten.sortedByDescending { it.dayt } //Fahrten nach aktualität sortieren
+
+
     Column(
         modifier = modifier
     ) {
@@ -153,14 +158,22 @@ fun FahrtenSection( //ab Meine Fahrten
             buttonText = "+ Neue Fahrt",
             onButtonClick =onAddClick
         )
+        if(sortierteFahrten.isEmpty()) {
+            Text(
+                text = "Noch keine Fahrten gespeichert",
+                color = AppTextMuted,
+                modifier = Modifier.padding(16.dp)
+            )
+        } else {
 
-        LazyColumn( //weil Scrollbar
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ){
-            items(vgfahrten) { vgfahrt ->
-                FahrtenCard(vgfahrt = vgfahrt)
+            LazyColumn( //weil Scrollbar
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(sortierteFahrten) { vgfahrt ->
+                    FahrtenCard(vgfahrt = vgfahrt)
+                }
+
             }
-
         }
     }
 }

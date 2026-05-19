@@ -3,6 +3,7 @@ package com.example.bahn_zeitkarten_tracker.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,15 +44,13 @@ import java.util.Locale
 @Composable
 fun MainLayout(){
     val gespeicherteZeitkarten = remember {
-        mutableStateListOf<Zeitkarte>().apply { //veränderbare Liste
-            addAll(zeitkarten)
-        }
+        mutableStateListOf<Zeitkarte>().apply { addAll(zeitkarten)}
+        // Ab .apply auskommentieren für App ohne Demodaten
     } //dass Zeitkarten gespeichert werden können
 
     val gespeicherteFahrten = remember {
-        mutableStateListOf<VgFahrt>().apply { //veränderbare Liste
-            addAll(vgfahrten)
-        }
+        mutableStateListOf<VgFahrt>().apply { addAll(vgfahrten)}
+        // Ab .apply auskommentieren für App ohne Demodaten
     } //dass Fahrten gespeichert werden können
 
 
@@ -62,7 +61,7 @@ fun MainLayout(){
             .background(Color.White)
             .systemBarsPadding(), //nicht unter Statusbar/Navigationsbar vom Gerät
         topBar = {
-            AppHeader(title = selectedScreen.title)
+            AppHeader(title = selectedScreen.title, icon = selectedScreen.icon )
         },
         bottomBar = {
             MenuBar(
@@ -95,6 +94,7 @@ fun MainLayout(){
                 Screen.Map -> MapLayout(
                     modifier = Modifier.fillMaxSize()
                 )
+
                 Screen.BreakEven -> BreakEvenLayout(
                     modifier = Modifier.fillMaxSize(),
                     zeitkarten = gespeicherteZeitkarten,
@@ -125,22 +125,28 @@ fun MainLayout(){
 
 
 //AppHeader Funktion => UI Baustein "Header":
+//Titel und Icon ändern sich je nachdem auf welchem screen man sich befindet.
+//da der Ticket screen der Homescreen ist wird hier der App Titel angezeigt
+//Daten zu den einzellnen screens ist in screens gespeichert.
 @Composable
-fun AppHeader(title: String) {
+fun AppHeader(
+    title: String,
+    icon: Int
+    ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp) //Platz vor inhalt
             .height(56.dp)
     ) {
-//        Icon(
-//            painter = painterResource(id = R.drawable.menu_icon),
-//            contentDescription = "Burgermenü Icon",
-//            modifier = Modifier
-//                .size(48.dp)
-//                .padding(start = 16.dp)
-//                .align(Alignment.CenterStart)
-//        ) //not included in the Prototype
+        Icon(
+            painter = painterResource(id = icon),
+            contentDescription = "Screen Icon", //Eigtl Burgermenu/Sidebar. jedoch nicht realisiert, deshalb Icon.
+            modifier = Modifier
+                .size(48.dp)
+                .padding(start = 16.dp)
+                .align(Alignment.CenterStart)
+        )
 
         Text(
             text = title.uppercase(Locale.GERMAN), //TODO:Wenn App English ändern
@@ -159,7 +165,7 @@ fun MenuBar(
 ){
     NavigationBar {
         bottomNavigationScreens.forEach { screen ->
-            MenuBarItem(
+            MenuBarItem( //extra Funktion (siehe unten)
                 selected = selectedScreen == screen,
                 icon = screen.icon,
                 label = screen.label,
@@ -171,7 +177,7 @@ fun MenuBar(
     }
 }//End Menubar
 
-//MenuBarItem:
+//MenuBarItem: wird 4x gebraucht für jeden screen der in der Menubar sein soll.
 @Composable
 fun RowScope.MenuBarItem(
     selected: Boolean,
@@ -201,6 +207,8 @@ fun RowScope.MenuBarItem(
     )
 }
 
+
+//Vorschau für Layout erstellung verwendet
 @Preview( //vorschau in Android studio
     name = "Vorschau MainLayout",
     showBackground = true,

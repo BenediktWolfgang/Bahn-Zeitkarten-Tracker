@@ -3,8 +3,8 @@ package com.example.bahn_zeitkarten_tracker.ui
 import androidx.annotation.DrawableRes
 import com.example.bahn_zeitkarten_tracker.R
 
-//Liste aller möglichen screens:
-//Statt in menubar + 100 WHs
+//Liste aller möglichen screes mit Titel und label(für Menubar) und icon.
+//Statt in menubar + 100 Wiederholungen
 sealed class Screen( //sealed - nur das was hier definiert ist
     val title: String,
     val label: String,

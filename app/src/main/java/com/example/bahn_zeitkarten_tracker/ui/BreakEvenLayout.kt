@@ -1,19 +1,12 @@
 package com.example.bahn_zeitkarten_tracker.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,18 +15,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import classes_and_Functions.AvgPrice
-import classes_and_Functions.SumPrice
 import classes_and_Functions.BreakEvenSim
+import classes_and_Functions.SumPrice
 import classes_and_Functions.SumRides
 import classes_and_Functions.VgFahrt
 import classes_and_Functions.Zeitkarte
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextMuted
-import java.time.LocalDateTime
 
 @Composable
 fun BreakEvenLayout(
@@ -47,7 +38,7 @@ fun BreakEvenLayout(
 
     val gefilterteFahrten = if (selectedZeitkarte != null) {
         fahrten.filter { it.zeitkarte == selectedZeitkarte }
-    } else emptyList()
+    } else emptyList() //Suche
 
     val fahrtkostenGesamt = SumPrice(gefilterteFahrten)
     val durchschnitt = AvgPrice(gefilterteFahrten)
@@ -66,7 +57,7 @@ fun BreakEvenLayout(
             }
         )
 
-        Column(
+        Column( //Text
             modifier = modifier
         ) {
             Text(
@@ -79,62 +70,63 @@ fun BreakEvenLayout(
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Text(
-                text = ("Kosten Zeitkarte: ${selectedZeitkarte?.preis?.div(100.00) ?: "-" } €"),
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .padding(start = 16.dp)
-            )
-
-            Text(
-                text = "Fahrten gesamt: ${anzFahrten}",
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .padding(start = 16.dp)
-            )
-            Text(
-                text = "Kosten pro Fahrt: ${durchschnitt/100.00} €",
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .padding(start = 16.dp)
-            )
-
-            Text(
-                text = "Fahrtkosten gesamt: ${fahrtkostenGesamt/100.00} €",
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .padding(start = 16.dp)
-            )
-
-            HorizontalDivider(
-                color = AppTextMuted,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-
-            Text(
-                text = "noch ${breakEven?.toInt()} Fahrten um Break-Even zu erreichen",
-                fontSize = 16.sp,
-                color = AppPrimary,
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .padding(bottom = 32.dp)
-                    .padding(start = 16.dp)
-            )
-
-            Text(
-                text = "Preisvergleich: ",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = AppPrimary,
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .padding(bottom = 32.dp)
-                    .padding(start = 16.dp)
-            )
-
-
-            // Graph anzeigen:
+            //(nur wenn Zeitkarte ausgewählt sonst defaulttext)
             if(selectedZeitkarte != null){
+                Text(
+                    text = ("Kosten Zeitkarte: ${selectedZeitkarte?.preis?.div(100.00) ?: "-" } €"),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .padding(start = 16.dp)
+                )
+
+                Text(
+                    text = "Fahrten gesamt: ${anzFahrten}",
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(start = 16.dp)
+                )
+                Text(
+                    text = "Kosten pro Fahrt: ${durchschnitt/100.00} €",
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(start = 16.dp)
+                )
+
+                Text(
+                    text = "Fahrtkosten gesamt: ${fahrtkostenGesamt/100.00} €",
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .padding(start = 16.dp)
+                )
+
+                HorizontalDivider(
+                    color = AppTextMuted,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                Text(
+                    text = "noch ${breakEven?.toInt()} Fahrten um Break-Even zu erreichen",
+                    fontSize = 16.sp,
+                    color = AppPrimary,
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .padding(bottom = 32.dp)
+                        .padding(start = 16.dp)
+                )
+
+                Text(
+                    text = "Preisvergleich: ",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AppPrimary,
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .padding(bottom = 32.dp)
+                        .padding(start = 16.dp)
+                )
+
+
+                // Graph anzeigen:
                 LineGraphView(
                     entries = gefilterteFahrten,
                     seit = selectedZeitkarte!!.giltv.atStartOfDay(),
@@ -145,7 +137,7 @@ fun BreakEvenLayout(
                         .padding(horizontal = 8.dp)
                 )
 
-                Text(
+                Text( //legende:
                     text = "Kosten Zeitkarte ... blau",
                     modifier = Modifier.padding(top = 16.dp).padding(start = 16.dp)
                 )
@@ -155,7 +147,7 @@ fun BreakEvenLayout(
                 )
             } else {
                 Text(
-                    text = "Zeitkarte auswählen um Graph anzuzeigen",
+                    text = "Zeitkarte auswählen um Berechnung anzuzeigen",
                     color = AppTextMuted,
                     modifier = Modifier.padding(16.dp)
                 )

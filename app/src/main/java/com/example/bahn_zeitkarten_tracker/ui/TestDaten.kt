@@ -7,8 +7,8 @@ import java.time.LocalDateTime
 
 // Demo Zeitkarten: von KI erstellen lassen
 // Preisquellen:
-// Klimaticket Ö: https://de.wikipedia.org/wiki/Klimaticket
-// Wiener Linien Monatskarte: 467€/Jahr = ~38.92€/Monat (Stand 2026)
+    // Klimaticket Ö: https://de.wikipedia.org/wiki/Klimaticket
+    // Wiener Linien Monatskarte: 467€/Jahr = ~38.92€/Monat (Stand 2026)
 val zeitkarten = listOf(
     Zeitkarte( // index 0 - Klimaticket 2025 (abgelaufen, Break-Even erreicht)
         name = "Klimaticket Österreich",
