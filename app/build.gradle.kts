@@ -77,7 +77,6 @@ dependencies {
     implementation("org.mapsforge:mapsforge-themes:0.25.0@jar")
     implementation("org.mapsforge:mapsforge-map-android:0.25.0@jar")
     implementation("com.caverock:androidsvg:1.4")
-    implementation("org.mapsforge:mapsforge-core:0.25.0@jar")
     implementation("org.mapsforge:mapsforge-poi:0.25.0@jar")
     implementation("org.mapsforge:mapsforge-poi-android:0.25.0@jar")
 
