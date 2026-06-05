@@ -1,21 +1,18 @@
 package classes_and_Functions
 
-import androidx.compose.foundation.layout.Arrangement
+
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.safeDrawingPadding
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -23,6 +20,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -95,7 +93,7 @@ fun converttoDate(futuredate: String): LocalDate{
     } catch (e: Exception) {
         LocalDate.now()
     }
-} //mit String, weil bei Int 1. Null verlorengehen würde
+} //mit String, weil bei Int 1. Null verloren gehen würde
 
 
 //Datum mit Uhrzeit
@@ -115,86 +113,36 @@ fun formatDate(date: LocalDate): String {
     return date.format(formatter)
 }
 
-// Basic Function Scaffolding kopiert von
+// Basic Function kopiert von
 // https://kotlinlang.org/api/compose-multiplatform/material3/androidx.compose.material3/-snackbar.html
+// danach leicht abgeändert um es meinen Bedürfnissen anzupassen
 @Composable
-fun DspPopupMSG(text: String) {
+fun DspPopupMSG(text: String, onDismiss: () -> Unit = {}) {
 
 // State for displaying Snackbar and tracking actions
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var actionPerformed by remember { mutableStateOf(false) }
 
-// Use BoxWithConstraints to create a stable layout
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-        // Main content box that won't be affected by Snackbar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(maxHeight - 80.dp) // Reserve space for Snackbar
-                .align(Alignment.TopCenter)
-        ) {
-            // Column to center our button vertically
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Use stable fixed width container for button
-                Box(
-                    modifier = Modifier.width(200.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                actionPerformed = false
-                                val result = snackbarHostState.showSnackbar(
-                                    message = text,
-                                    duration = SnackbarDuration.Long
-                                )
-                                if (result == SnackbarResult.ActionPerformed) {
-                                    actionPerformed = true
-                                }
-                            }
-                        }
-                    ) {
-                        Text("Show Snackbar")
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Fixed size box for action message
-                Box(
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(200.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (actionPerformed) {
-                        Text(
-                            text = "Action performed!",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-                }
-            }
-        }
-
-        // Separate box for Snackbar with fixed height at bottom
+    LaunchedEffect(text) {
+        snackbarHostState.showSnackbar(
+            message = text,
+            duration = SnackbarDuration.Long
+        )
+        onDismiss()
+    }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(80.dp)
-                .align(Alignment.BottomCenter)
         ) {
             // SnackbarHost positioned at the bottom
             SnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 16.dp),
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 10.dp),
                 snackbar = { data ->
                     Snackbar(
                         action =  null,
@@ -215,4 +163,4 @@ fun DspPopupMSG(text: String) {
             )
         }
     }
-}
+
