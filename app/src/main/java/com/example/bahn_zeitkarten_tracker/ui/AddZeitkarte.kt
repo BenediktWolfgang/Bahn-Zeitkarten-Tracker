@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import classes_and_Functions.DspPopupMSG
 import classes_and_Functions.Zeitkarte
 import classes_and_Functions.converttoDate
 import com.example.bahn_zeitkarten_tracker.ui.theme.AppPrimary
@@ -85,7 +86,7 @@ fun AddZeitkarte(
         OutlinedTextField(
             value = if (preis == 0) "" else preis.toString(),
             onValueChange = { preis = it.toIntOrNull() ?: 0 },
-            label = { Text("Preis (in €)") },
+            label = { Text("*Preis (in €)", fontWeight = FontWeight.Bold) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -114,8 +115,13 @@ fun AddZeitkarte(
 
         OutlinedButton(
             onClick = {
-                if (giltv.isBlank() || giltb.isBlank() || name.isBlank()) return@OutlinedButton
-
+                if (giltv.isBlank() || giltb.isBlank() || name.isBlank() || preis == 0) {
+                    showerror = true
+                    if(giltv.isBlank() ||giltb.isBlank()) errormsg = "Bitte gib gültige Datumswerte ein"
+                    if(preis == 0) errormsg = "Bitte gib einen gültigen Preis ein"
+                    if(name.isBlank()) errormsg = "Bitte gib einen Namen der Zeitkarte an"
+                    return@OutlinedButton
+                }
 
                 val neueZeitkarte = Zeitkarte(
                     name = name,
@@ -141,6 +147,9 @@ fun AddZeitkarte(
             Text("Zeitkarte hinzufügen")
         }
     }
+    if(showerror)
+        DspPopupMSG(errormsg,
+            onDismiss = { showerror = false })
 }
 
 
