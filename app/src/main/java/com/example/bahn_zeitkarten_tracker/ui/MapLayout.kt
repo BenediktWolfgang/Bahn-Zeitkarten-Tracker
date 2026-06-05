@@ -54,72 +54,72 @@ import java.io.File
 fun MapLayout( //Grundlayout
     modifier: Modifier = Modifier
 ){
-//    auskommentiertes, da Karte nicht schön realisiert ist und sonst das Layout crashed
-//    //Speicher von Eingabefeld
-//    var from by remember { mutableStateOf("") }
-//    var to by remember { mutableStateOf("") }
-//
-//    //Default
-//    val distanceText = if (from.isNotBlank() && to.isNotBlank()) {
-//        "Distanz: wird berechnet..."
-//    } else {
-//        "Distanz: Start und Ziel eingeben"
-//    } //TODO: noch ändern!
+    //Speicher von Eingabefeld
+    var from by remember { mutableStateOf("") }
+    var to by remember { mutableStateOf("") }
+
+    //Default
+    val distanceText = if (from.isNotBlank() && to.isNotBlank()) {
+        "Distanz: wird berechnet..."
+    } else {
+        "Distanz: Start und Ziel eingeben"
+    } //TODO: noch ändern!
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(all = 8.dp),
-        // verticalArrangement = Arrangement.spacedBy(16.dp) //Platz zwischen elementen
+        verticalArrangement = Arrangement.spacedBy(16.dp) //Platz zwischen elementen
     ) {
-//        FahrtInput(
-//            from = from,
-//            to = to,
-//            onFromChange = { from = it },
-//            onToChange = { to = it }
-//        )
-//
+        FahrtInput(
+            from = from,
+            to = to,
+            onFromChange = { from = it },
+            onToChange = { to = it }
+        )
+
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .height(300.dp)
+                .offset(y=40.dp)
         ){
             //Karte einbinden
             MapLayoutKarte(
                 modifier = Modifier.fillMaxSize()
                 )
         }
-//
-//        Text( //TODO: berechnung einbinden
-//            text = distanceText,
-//            fontSize = 16.sp,
-//            fontWeight = FontWeight.Bold
-//        )
-//
-//        val aktiv = from.isNotBlank() && to.isNotBlank() //aktiver Button oder nicht
-//
-//        Button( //fahrt loggen
-//            onClick = {
-//                // TODO: Fahrt loggen PopUp
-//            },
-//            enabled = aktiv,
-//            shape = RoundedCornerShape(12.dp),
-//            colors = ButtonDefaults.buttonColors( //zuerst grau; dann farbig
-//                contentColor = AppTextLight,
-//                disabledContentColor = AppTextLight,
-//                containerColor = AppPrimary,
-//                disabledContainerColor = AppTextMuted
-//            ),
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text(
-//                text = "+ Fahrt loggen",
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Bold
-//            )
-//        }
+
+        Text( //TODO: berechnung einbinden
+            text = distanceText,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        val aktiv = from.isNotBlank() && to.isNotBlank() //aktiver Button oder nicht
+
+        Button( //fahrt loggen
+            onClick = {
+                // TODO: Fahrt loggen PopUp
+            },
+            enabled = aktiv,
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors( //zuerst grau; dann farbig
+                contentColor = AppTextLight,
+                disabledContentColor = AppTextLight,
+                containerColor = AppPrimary,
+                disabledContainerColor = AppTextMuted
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "+ Fahrt loggen",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
