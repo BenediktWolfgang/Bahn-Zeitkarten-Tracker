@@ -18,8 +18,6 @@ import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
 
 
-// Graph Layout Shit:
-
 class VgFahrt (
     val von:    String,//Loc,
     val bis:    String, //Loc,
@@ -157,4 +155,14 @@ private fun limitbytime(entries: List<VgFahrt>, seit: LocalDateTime): List<VgFah
 
     return entries.filter{ !it.dayt.isBefore(seit)}
 
+}
+
+fun validateinputs(von: String, bis: String, dist: Int, errormsg: (String) -> Unit): Boolean {
+    return when {
+        von.isBlank() -> {errormsg("Bitte Startpunkt eingeben"); false}
+        bis.isBlank() -> {errormsg("Bitte Endpunkt eingeben"); false}
+        dist == 0 -> {errormsg("Bitte Distanz eingeben"); false}
+        else -> true
+
+    }
 }
