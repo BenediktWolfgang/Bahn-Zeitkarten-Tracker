@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="MainActivity">
+      <SelectionState runConfigName="Vorschau HomeLayout - MapLayoutPreview">
         <option name="selectionMode" value="DROPDOWN" />
         <DialogSelection />
       </SelectionState>

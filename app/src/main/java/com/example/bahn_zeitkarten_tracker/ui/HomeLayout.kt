@@ -129,7 +129,7 @@ fun ZeitkartenSection( //Ab Meine Zeitkarten
         } else {
 
             LazyColumn( //weil Scrollbar
-                verticalArrangement = Arrangement.spacedBy(16.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
+                verticalArrangement = Arrangement.spacedBy(10.dp) //abstand zwischen Listenelementen -> Titel ganz links, Button ganz rechts
             ) {
                 items(sortierteZeitkarten) { zeitkarte ->
                     TicketCard(zeitkarte = zeitkarte)
@@ -167,7 +167,7 @@ fun FahrtenSection( //ab Meine Fahrten
         } else {
 
             LazyColumn( //weil Scrollbar
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(sortierteFahrten) { vgfahrt ->
                     FahrtenCard(vgfahrt = vgfahrt)
