@@ -2,6 +2,8 @@ package com.example.bahn_zeitkarten_tracker.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +40,7 @@ import classes_and_Functions.VgFahrt
 import classes_and_Functions.formatDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.bahn_zeitkarten_tracker.ui.theme.AppTextLight
 
 @Composable
 fun HomeLayout( //Grundlayout in Home
@@ -232,23 +235,27 @@ zeitkarte: Zeitkarte
             Box(
                 modifier = Modifier
                     .width(56.dp)
-                    .height(130.dp),
-                contentAlignment = Alignment.BottomCenter
+                    .height(130.dp)
+                    .background(AppPrimary),
+                contentAlignment = Alignment.BottomCenter,
+
             ){
 //                giltv
 //                giltb
                 Text (
                     text = "${zeitkarte.giltNochTage()} Tage",
                     maxLines = 1,
-                    fontSize = 13.sp,
+                    fontSize = 14.sp,
                     softWrap = false,
+                    color = AppTextLight,
                     modifier = Modifier
                         .graphicsLayer(rotationZ = -90f)
                         .align(Alignment.Center)
+
                 )
             }
 
-            DashedVerticalDivider() //Stricklierte Linie
+            //DashedVerticalDivider() //Stricklierte Linie
 
             //rechter Bereich
             Column(
@@ -306,6 +313,7 @@ fun FahrtenCard( //eine Card für eine Fahrt
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
+            .border(2.dp, AppPrimary, RoundedCornerShape(10))
     ) {
         Column(
             modifier = Modifier
