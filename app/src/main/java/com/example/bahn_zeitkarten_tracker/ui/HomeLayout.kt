@@ -313,7 +313,6 @@ fun FahrtenCard( //eine Card für eine Fahrt
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
-            .border(2.dp, AppPrimary, RoundedCornerShape(10))
     ) {
         Column(
             modifier = Modifier
