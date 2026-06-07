@@ -86,7 +86,7 @@ fun AddFahrt(
             OutlinedTextField(
                 value = von,
                 onValueChange = { von = it },
-                label = { Text("Startpunkt der Fahrt", fontWeight = FontWeight.Bold) },
+                label = { Text("*Startpunkt der Fahrt", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -94,7 +94,7 @@ fun AddFahrt(
             OutlinedTextField(
                 value = bis,
                 onValueChange = { bis = it },
-                label = { Text("Endpunkt der Fahrt", fontWeight = FontWeight.Bold) },
+                label = { Text("*Endpunkt der Fahrt", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -102,7 +102,7 @@ fun AddFahrt(
             OutlinedTextField(
                 value = if (dist == 0) "" else dist.toString(),
                 onValueChange = { dist = it.toIntOrNull() ?: 0 },
-                label = { Text("Distanz (km)", fontWeight = FontWeight.Bold) },
+                label = { Text("*Distanz (km)", fontWeight = FontWeight.Bold) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )

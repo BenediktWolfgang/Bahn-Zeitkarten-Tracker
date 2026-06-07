@@ -117,7 +117,7 @@ fun createLineGraph(
             DataPoint(ChronoUnit.DAYS.between(seit, entry.dayt).toDouble(), runningSumCar)
         }.toTypedArray()
     )
-    series3.color = android.graphics.Color.RED
+    series3.color = android.graphics.Color.BLUE
 
     // Wann wird was gezeichnet:
     if (!showCo2) {

@@ -22,13 +22,14 @@ Externe Libraries und Frameworks:
 Dauer der Entwicklung:
 [22.5 Stunden] Benedikt M3
 [6 Stunden] Benedikt M4
-[40 Stunden] Marisa
-[24 Stunden] Erin
-[86,5] Gesamt (inklusive Dokumentation und Vorarbeit)
+[40 Stunden] Marisa M3
+[24 Stunden] Erin M3
+[3 Stunden] Erin M4
+[95,5] Gesamt (inklusive Dokumentation und Vorarbeit)
 
 Weitere Anmerkungen:
 
-die vierte Person ist bei Beginn zu M4 abgesprungen. 
+die vierte Person ist bei Beginn zu M3 abgesprungen. 
 
 ### KI Nutzung:
 #### Benedikt:

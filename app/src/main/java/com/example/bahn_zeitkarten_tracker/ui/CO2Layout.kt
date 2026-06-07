@@ -149,7 +149,7 @@ fun CO2Layout(
         )
 
         Text( //legende:
-            text = "CO2 Verbrauch Auto ... rot",
+            text = "CO2 Verbrauch Auto ... blau",
             modifier = Modifier.padding(top = 16.dp).padding(start = 16.dp)
         )
         Text(
